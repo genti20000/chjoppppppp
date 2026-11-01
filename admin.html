@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Barber Order Admin | Choppers Barbers</title><meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="/style.css"></head>
+<body class="admin-body">
+<div class="topbar"><a class="brand" href="/"><span class="brand-mark">✂</span><span>CHOPPERS <small>BARBER ORDER ADMIN</small></span></a><a class="top-link" href="/">← VIEW BOOKING PAGE</a></div>
+<main class="site-container admin-container">
+<section class="intro"><div class="eyebrow">OWNER CONTROLS</div><h1>Barber <em>order.</em></h1><p>Change the order on the public booking page. Any Barber always stays at the top.</p></section>
+<section class="booking-card">
+<div id="login-panel">
+ <div class="card-heading"><div><span class="step">PRIVATE ACCESS</span><h2>Sign in</h2></div></div>
+ <form id="login-form" class="admin-form"><label for="password">Admin password</label><input type="password" id="password" autocomplete="current-password" required placeholder="Enter admin password"><button type="submit" class="book-button">Unlock admin <span>→</span></button></form>
+</div>
+<div id="editor-panel" hidden>
+ <div class="card-heading"><div><span class="step">DRAG OR USE ARROWS</span><h2>Arrange your team</h2></div><button class="text-action" id="logout">Log out</button></div>
+ <p class="admin-help">Reorder using the ↑ ↓ buttons (also works on phones). Drag a row with your mouse on desktop. Add a staff-only Square widget URL to make each booking button preselect that barber.</p>
+ <div id="storage-warning" class="warning" hidden>Live saving is not configured. Add the Supabase environment variables and run the SQL setup in SETUP.md.</div>
+ <div class="admin-any"><span class="any-icon">♧</span><b>Any Barber</b><span class="fixed">ALWAYS FIRST</span></div>
+ <div id="editor-list"></div>
+ <div class="actions"><button id="save" class="book-button">Save changes <span>✓</span></button></div>
+</div>
+<div id="message" role="status" aria-live="polite" class="message"></div>
+</section></main>
+<script src="/admin.js" defer></script>
+</body></html>
