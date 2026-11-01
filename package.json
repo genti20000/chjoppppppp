@@ -1,0 +1,7 @@
+{
+  "name": "choppers-square-booking-selector",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Square-powered Choppers Barbers staff selector with owner-managed display order",
+  "scripts": {"dev": "npx vercel dev"}
+}
