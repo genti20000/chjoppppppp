@@ -8,6 +8,7 @@ create table if not exists public.choppers_staff_users (
   display_name text not null check (length(display_name) between 2 and 60),
   username text not null unique check (username ~ '^[a-z][a-z0-9._-]{2,31}$'),
   password_hash text not null,
+  session_nonce text not null default encode(gen_random_bytes(16),'hex'),
   phone_e164 text not null check (phone_e164 ~ '^\+[1-9][0-9]{8,14}$'),
   active boolean not null default true,
   created_at timestamptz not null default now(),
