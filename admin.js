@@ -30,7 +30,7 @@
     const wrap=document.createElement('label');wrap.className='url-wrap';
     const lab=document.createElement('span');lab.className='field-label';lab.textContent='Square booking URL for '+NAMES[id];wrap.append(lab);
     const input=document.createElement('input');input.className='url-input';input.type='url';input.placeholder='https://book.squareup.com/... (optional)';input.value=data.links[id]||'';input.autocomplete='off';input.addEventListener('input',function(){data.links[id]=input.value.trim();});wrap.append(input);
-    const small=document.createElement('small');small.textContent='Leave blank to use the general Square page (customer will select this barber again).';wrap.append(small);
+    const small=document.createElement('small');small.textContent='Leave blank to use this barber’s verified Square link already built into the booking page.';wrap.append(small);
     el.append(top,wrap);
     el.addEventListener('dragstart',function(e){dragged=id;e.dataTransfer.effectAllowed='move';el.classList.add('dragging');});
     el.addEventListener('dragend',function(){dragged=null;el.classList.remove('dragging');document.querySelectorAll('.drop-target').forEach(function(n){n.classList.remove('drop-target');});});
