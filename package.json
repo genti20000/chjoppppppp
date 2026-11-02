@@ -3,5 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "Square-powered Choppers Barbers staff selector with owner-managed display order",
-  "scripts": {"dev": "npx vercel dev"}
+  "scripts": {
+    "dev": "npx vercel dev",
+    "test": "node --test test/*.test.js",
+    "check": "node --check lib/staff.js && node --check staff.js && node --check staff-owner.js && node --check api/staff/owner.js && node --check api/staff/auth.js"
+  }
 }
