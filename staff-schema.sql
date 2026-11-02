@@ -66,3 +66,32 @@ grant execute on function public.choppers_staff_reserve_call(uuid,text) to servi
 
 -- Owner should periodically delete historical call metadata after retention review.
 -- This SQL does not expose a public staff/customer data API.
+
+
+-- Persistent login throttling, keyed by HMAC of username/IP (no raw IP stored).
+create table if not exists public.choppers_staff_login_limits(
+  rate_key text not null,
+  hour_bucket timestamptz not null,
+  attempts integer not null default 1 check (attempts between 1 and 20),
+  primary key (rate_key,hour_bucket)
+);
+alter table public.choppers_staff_login_limits enable row level security;
+revoke all on public.choppers_staff_login_limits from public,anon,authenticated;
+grant select,insert,update,delete on public.choppers_staff_login_limits to service_role;
+
+create or replace function public.choppers_staff_allow_login(p_key text,p_limit integer)
+returns boolean language plpgsql security invoker set search_path=public
+as $$
+declare v_attempts integer;
+begin
+ if p_key is null or length(p_key)>96 or p_limit not between 1 and 20 then return false; end if;
+ insert into public.choppers_staff_login_limits(rate_key,hour_bucket,attempts)
+ values(p_key,date_trunc('hour',now()),1)
+ on conflict (rate_key,hour_bucket)
+ do update set attempts=public.choppers_staff_login_limits.attempts+1
+ where public.choppers_staff_login_limits.attempts < p_limit
+ returning attempts into v_attempts;
+ return v_attempts is not null;
+end;$$;
+revoke all on function public.choppers_staff_allow_login(text,integer) from public,anon,authenticated;
+grant execute on function public.choppers_staff_allow_login(text,integer) to service_role;
