@@ -134,3 +134,86 @@
  .barber-book-menu{padding-left:74px;padding-right:10px}
 }
 @media(prefers-reduced-motion:reduce){.barber-book-menu{animation:none}.barber-book-toggle,.barber-book-option{transition:none}}
+
+
+/* CHOPPERS STAFF APP · 2 NOV 2026 */
+.staff-container,.owner-container{max-width:740px}
+.staff-intro{margin-bottom:27px}
+.staff-intro h1,.owner-container h1{font-size:clamp(42px,8vw,61px)}
+.staff-login-card{border-color:#5c4e3f}
+.staff-form{display:flex;flex-direction:column;padding:25px 28px 27px;gap:10px}
+.staff-label{color:#e2ddd4;font-size:12px;font-weight:800;letter-spacing:.02em;display:block}
+.staff-input{width:100%;min-height:49px;background:#141516;color:#fff;border:1px solid #555751;border-radius:10px;padding:13px 14px;font-size:15px;outline:none}
+.staff-input:focus{border-color:var(--gold);box-shadow:0 0 0 2px #eac48e33}
+.staff-form .staff-input{margin-bottom:11px}
+.staff-form .book-button{margin-top:7px}
+.staff-status{color:#e4c38e;font-size:13px;line-height:1.5;min-height:16px;margin:14px 0;padding:0 20px}
+.staff-form .staff-status{margin:0;padding:0}
+.staff-disclaimer{border-top:1px solid #3a3c39;padding:18px 26px;font-size:12px;line-height:1.7;color:#adb0aa;background:#191a1a}
+.staff-profilebar{display:flex;gap:15px;justify-content:space-between;align-items:center;margin:3px 0 19px}
+.staff-profilebar h2{font-size:26px;letter-spacing:-.03em;margin:8px 0 0}
+.staff-logout{font-size:12px;background:#242525;color:var(--gold);border:1px solid #686155;border-radius:9px;padding:11px 13px;white-space:nowrap}
+.staff-privacy{display:flex;align-items:center;gap:16px;border:1px solid #5f5748;border-radius:12px;background:#2e2a24;padding:17px 20px;margin-bottom:23px}
+.staff-privacy-symbol{color:#eac48e;font-size:25px}
+.staff-privacy div{display:flex;flex-direction:column;gap:5px}
+.staff-privacy b{font-size:14px}
+.staff-privacy small{font-size:12px;color:#bdbaae;line-height:1.5}
+.staff-schedule{border-color:#494743}
+.staff-daybar{display:flex;align-items:center;gap:12px;padding:19px 24px;background:#232323;border-bottom:1px solid #40403e}
+.staff-daybar label{font-size:13px;font-weight:800;color:#dbcfb8}
+.staff-daybar .staff-input{width:auto;flex:1;min-width:0;max-width:260px}
+.staff-refresh{border:1px solid #827153;background:#342f29;color:var(--gold);padding:12px;border-radius:9px;white-space:nowrap;font-size:13px;font-weight:750;min-height:46px}
+.staff-refresh:disabled{opacity:.5}
+.staff-appointments{display:block}
+.staff-empty{text-align:center;padding:39px 19px;color:#b4b5b3;font-size:14px;line-height:1.6}
+.staff-appointment{padding:21px 25px;border-bottom:1px solid #383a38}
+.staff-appt-head{display:flex;align-items:center;gap:17px}
+.staff-appt-time{background:#eac48e;color:#171713;border-radius:8px;display:grid;place-items:center;min-width:77px;min-height:65px;padding:12px 10px;font-size:20px;letter-spacing:-.04em;font-weight:900}
+.staff-appt-desc{display:flex;flex:1;flex-direction:column;gap:6px}
+.staff-appt-desc strong{font-size:17px;letter-spacing:-.02em}
+.staff-appt-desc span{font-size:12px;color:#b0b3af}
+.staff-appt-tag{font-size:10px;font-weight:850;letter-spacing:.08em;color:#bcd6c2;background:#1c3425;padding:7px;border-radius:6px}
+.staff-appt-privacy{display:flex;gap:9px;align-items:center;color:#b0b3af;font-size:12px;margin:17px 0 12px}
+.staff-lock-symbol{color:#eac48e;font-size:19px}
+.staff-appt-tools{display:flex;flex-direction:column;gap:8px}
+.staff-call{background:#34302a;color:#f0ce9b;border:1px solid #8c7354;border-radius:9px;min-height:46px;font-size:14px;font-weight:850}
+.staff-call:hover{background:#51402d}
+.staff-call:disabled{opacity:.5;cursor:wait}
+.staff-call-status,.staff-setup-note{color:#c5b6a0;font-size:12px;line-height:1.5;margin:0}
+.staff-schedule-footer{display:flex;gap:10px;justify-content:space-between;padding:16px 22px;font-size:11px;color:#a8a8a4}
+.staff-payments{display:flex;gap:16px;align-items:flex-start;background:#242522;border:1px solid #50504a;padding:21px;margin:20px 0 0;border-radius:14px}
+.staff-pay-icon{width:48px;height:48px;display:grid;place-items:center;color:#eac48e;font-size:25px;background:#39342d;border-radius:11px;flex:none}
+.staff-payments b{font-size:15px}
+.staff-payments p{font-size:12px;line-height:1.7;color:#babbb7;margin:7px 0 0}
+.owner-create{margin-top:21px}
+.owner-list{display:block}
+.owner-staff-row{padding:20px 25px;border-bottom:1px solid #444540}
+.owner-staff-header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
+.owner-staff-header>div{display:flex;flex-direction:column;gap:6px}
+.owner-staff-header strong{font-size:19px}
+.owner-staff-header small{font-size:11px;color:#b5b7b0}
+.owner-staff-pill{font-size:10px;border:1px solid #555;padding:6px 9px;border-radius:8px;color:#c2c2bf}
+.owner-staff-row .staff-label{margin-bottom:8px}
+.owner-staff-row .staff-input{margin-bottom:14px}
+.owner-staff-buttons{display:flex;flex-wrap:wrap;gap:9px}
+.owner-small-button{padding:10px 12px;background:#33312e;border:1px solid #84765f;color:#f4e3c6;border-radius:8px;font-size:12px;font-weight:700;min-height:40px}
+.owner-danger{background:#442b29;border-color:#97675a;color:#f6c4b9}
+.owner-credentials{background:#302d26;border:1px solid #eac48e;border-radius:13px;padding:20px;margin-top:20px}
+.owner-credentials b{color:#eac48e;font-size:16px}
+.owner-credentials p{color:#e2d7c4;font-size:13px;line-height:1.6}
+.owner-credentials code{display:block;background:#151515;color:#fff;border-radius:8px;padding:15px;font-size:15px;overflow-wrap:anywhere}
+.owner-credentials button{background:var(--gold);color:#101112;border:0;padding:11px 15px;border-radius:9px;font-weight:800;margin-top:12px}
+@media(max-width:550px){
+ .staff-form{padding:21px 18px}
+ .staff-profilebar h2{font-size:22px}
+ .staff-daybar{padding:15px;gap:7px}
+ .staff-daybar .staff-input{font-size:14px;padding:10px 8px}
+ .staff-refresh{font-size:12px;padding:9px 8px}
+ .staff-appointment{padding:18px 15px}
+ .staff-appt-head{gap:10px}
+ .staff-appt-time{min-width:70px;font-size:18px}
+ .staff-appt-desc strong{font-size:15px}
+ .staff-appt-tag{font-size:8px}
+ .staff-privacy{padding:15px 14px}
+ .owner-staff-row{padding:18px 15px}
+}
