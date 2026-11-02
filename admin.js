@@ -2,6 +2,12 @@
   'use strict';
   const IDS=['liri','marouan','nick','victor'];
   const NAMES={liri:'Liri',marouan:'Marouan ⚽',nick:'Nick',victor:'Victor'};
+  const PRESET_LINKS = {
+  "liri": "https://squareup.com/appointments/book/5b02w9466dexxu/LDBX5380WHX98/services",
+  "marouan": "https://squareup.com/appointments/book/ycy9pbpbxlrgy8/LDBX5380WHX98/services",
+  "nick": "https://squareup.com/appointments/book/yqs1tx0qnxicha/LDBX5380WHX98/services",
+  "victor": "https://book.squareup.com/appointments/cqxqe8k9vaad1m/location/LDBX5380WHX98/services"
+};
   const PHOTOS={
     liri:'https://appointments-production-f.squarecdn.com/files/6adcc9b2ad67b0186d53b9be7c11b2fc/original.jpeg?width=60&height=60&fit=crop&enable=upscale&dpr=1',
     marouan:'https://appointments-production-f.squarecdn.com/files/a6288951b027ad148eddd138992068ad/original.jpeg?width=60&height=60&fit=crop&enable=upscale&dpr=1',
@@ -34,7 +40,7 @@
     return el;
   }
   function paint(){list.replaceChildren(...data.order.map(row));}
-  async function load(){const config=await api('/api/config');data.order=Array.isArray(config.order)?config.order:IDS.slice();data.links=config.links||{};paint();document.getElementById('storage-warning').hidden=!!config.storageReady;}
+  async function load(){const config=await api('/api/config');data.order=Array.isArray(config.order)?config.order:IDS.slice();data.links=Object.fromEntries(IDS.map(id=>[id,(config.links&&config.links[id])||PRESET_LINKS[id]]));paint();document.getElementById('storage-warning').hidden=!!config.storageReady;}
   async function session(){try{const s=await api('/api/auth');if(s.authenticated){login.hidden=true;editor.hidden=false;await load();}else{login.hidden=false;editor.hidden=true;}}catch(e){tell(e.message);}}
   document.getElementById('login-form').addEventListener('submit',async function(e){e.preventDefault();tell('');try{await api('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.getElementById('password').value})});document.getElementById('password').value='';await session();}catch(err){tell(err.message);}});
   document.getElementById('logout').addEventListener('click',async function(){await api('/api/auth',{method:'DELETE'});await session();tell('Signed out.');});
