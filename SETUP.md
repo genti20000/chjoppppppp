@@ -6,7 +6,7 @@ A mobile-first, Square-powered booking selector for Choppers Barbers, 210 Bermon
 
 - **Any Barber** always appears first.
 - Real current Choppers barber names and Square profile photos: **Liri, Marouan, Nick, Victor**.
-- Tap to select a barber; press **Book with …** to continue to Square Appointments.
+- Tap to select a barber; **Book with …** opens that barber's published Square link for Monday–Friday. A separate Saturday button opens the barber's SimplyBook page.
 - Owner-only **/admin** screen can reorder staff using arrows or desktop drag-and-drop and assign a staff-specific Square booking/widget URL to each barber.
 - With Supabase configured, changes save centrally and appear for every visitor. No Square API key is required for this link-based solution.
 - Styling follows Choppers branding. The website itself is independent of the WordPress Choppers site.
@@ -14,7 +14,21 @@ A mobile-first, Square-powered booking selector for Choppers Barbers, 210 Bermon
 ## Verified general booking link
 https://book.squareup.com/appointments/zqexq32vqp1hkn/location/LDBX5380WHX98/services
 
-**Important:** A barber-specific booking link was not publicly obtainable for any of the four staff. Until you enter those links in /admin, pressing **Book with Liri / Marouan / Nick / Victor** opens the real general Square booking page. The page clearly tells customers they must choose that barber again inside Square. No pretending the generic link preselects the barber.
+**Update 2 November 2026:** The official Choppers website publishes individual Square links under "BOOK [NAME] → BOOK MON–FRI". All four are now preconfigured in the app:
+
+- liri: https://squareup.com/appointments/book/5b02w9466dexxu/LDBX5380WHX98/services
+- marouan: https://squareup.com/appointments/book/ycy9pbpbxlrgy8/LDBX5380WHX98/services
+- nick: https://squareup.com/appointments/book/yqs1tx0qnxicha/LDBX5380WHX98/services
+- victor: https://book.squareup.com/appointments/cqxqe8k9vaad1m/location/LDBX5380WHX98/services
+
+Choppers currently uses SimplyBook for Saturday appointments. The page therefore includes a separate Saturday button, using these published Saturday links:
+
+- liri: https://choppersbarbers.simplybook.it/v2/#book/provider/4
+- marouan: https://choppersbarbers.simplybook.it/v2/#book/provider/5
+- nick: https://choppersbarbers.simplybook.it/v2/#book/provider/10
+- victor: https://choppersbarbers.simplybook.it/v2/#book/provider/3
+
+**Note:** The links are confirmed as published for these barbers on Choppers' website. Before release, test each booking link in Square and SimplyBook, including service/availability and any barber-preselection behaviour.
 
 ## 1. Deploy through Vercel
 1. In Vercel select **Add New → Project → Import Git Repository** and choose **genti20000/chjoppppppp**.
@@ -52,7 +66,7 @@ Add a WordPress link/button to your new Vercel domain (e.g. /book or book.choppe
 Only change the current WordPress booking button after you have verified the new site and all links.
 
 ## Notes
-- **Any Barber** links to the normal Square booking flow and offers all eligible bookable staff.
+- **Any Barber** offers the general Square booking page for Mon–Fri and the general SimplyBook page for Saturday.
 - This app does not edit Square's own internal staff order. It controls only the staff order on your custom page.
 - Staff are currently hardcoded from the verified live Square Haircut service as of 1 November 2026; if Square's staff changes, update this source or add an API sync.
 - Genuine photos are loaded from Square's public CDN. If Square changes those URLs, photos may need updating.
