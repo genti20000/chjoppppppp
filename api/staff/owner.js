@@ -42,7 +42,7 @@ module.exports=async function(req,res){
   if(Object.prototype.hasOwnProperty.call(body,'phone'))changed.phone_e164=s.phone(body.phone);
   if(Object.prototype.hasOwnProperty.call(body,'username'))changed.username=s.validateUsername(body.username);
   let password;
-  if(body.reset_password===true){password=randomPassword();changed.password_hash=s.hashPassword(password);}
+  if(body.reset_password===true){password=randomPassword();changed.password_hash=s.hashPassword(password);changed.session_nonce=crypto.randomBytes(16).toString('hex');}
   const users=await s.db('choppers_staff_users?barber_id=eq.'+barber_id,'PATCH',changed,{Prefer:'return=representation'});
   if(!users?.length)throw s.err('Staff account not found.',404);
   return res.status(200).json({user:clean(users[0]),...(password?{one_time_password:password}:{})});
