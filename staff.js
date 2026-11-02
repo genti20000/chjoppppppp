@@ -45,7 +45,8 @@ function appointmentCard(b){
  const head=el('div','staff-appt-head');
  const time=el('div','staff-appt-time',localTime(b.start_at));
  const desc=el('div','staff-appt-desc');
- desc.append(el('strong','',b.service||'Appointment'),el('span','',(b.duration_minutes||0)+' min · '+(b.status||'Booked')));
+ const price=Number.isFinite(b.estimated_price_pence)?' · £'+(b.estimated_price_pence/100).toFixed(2):'';
+ desc.append(el('strong','',b.service||'Appointment'),el('span','',(b.duration_minutes||0)+' min'+price+' · '+(b.status||'Booked')));
  head.append(time,desc,el('span','staff-appt-tag','BOOKED'));
  const privacy=el('div','staff-appt-privacy');
  privacy.append(el('span','staff-lock-symbol','◈'),el('span','',"Customer's phone and email are hidden."));
