@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Find the first available Choppers barber for a weekday appointment.">
+<title>Any Available Barber | Choppers Barbers</title>
+<link rel="stylesheet" href="/style.css">
+</head><body>
+<div class="topbar"><a class="brand" href="https://choppersbarbers.co.uk/" aria-label="Choppers Barbers"><span class="brand-mark">✂</span><span>CHOPPERS <small>BARBERS · LONDON BRIDGE</small></span></a><span class="secure"><span class="secure-dot"></span> SQUARE BOOKING</span></div>
+<main class="site-container any-container">
+ <div class="intro"><div class="eyebrow">BOOK AUTOMATICALLY · MONDAY TO FRIDAY</div>
+ <h1>Any <em>barber.</em></h1>
+ <p>Choose a time that suits you. We'll assign an available Choppers barber and save your appointment directly with Square.</p></div>
+ <a class="back-link" href="/">← Back to all barbers</a>
+ <div id="connection-error" class="any-banner" role="alert" hidden>
+   <strong>Automatic booking isn't connected yet.</strong>
+   <p>Use the existing Square booking page in the meantime. Choose your service and select “Any staff” when Square asks.</p>
+   <a class="book-button" href="https://book.squareup.com/appointments/zqexq32vqp1hkn/location/LDBX5380WHX98/services" target="_blank" rel="noopener noreferrer">Book with Any Staff on Square ↗</a>
+ </div>
+ <section class="booking-card any-card" id="booking-panel" hidden>
+   <div class="card-heading"><div><span class="step">01 / SERVICE & DATE</span><h2>Find an available time</h2></div><span class="staff-count">ANY BARBER</span></div>
+   <div class="any-section">
+     <label class="any-label" for="service">Service</label>
+     <select id="service" class="any-input" required><option value="">Loading Square services…</option></select>
+     <div class="any-service-extra" id="service-detail" aria-live="polite"></div>
+     <label class="any-label" for="day">Appointment date</label>
+     <input id="day" class="any-input" type="date" required>
+     <p class="any-note">Weekday appointments only. <a href="https://choppersbarbers.simplybook.it/" target="_blank" rel="noopener noreferrer">Book Saturday through SimplyBook ↗</a></p>
+     <button type="button" class="book-button" id="find-times">Find available times <span aria-hidden="true">→</span></button>
+     <p class="any-status" id="search-status" role="status" aria-live="polite"></p>
+   </div>
+   <section id="times-panel" class="any-section any-step" hidden>
+     <h3>Available times</h3>
+     <p class="any-note">These slots are live from Square. Times shown are London local time.</p>
+     <div id="slot-grid" class="slot-grid" role="group" aria-label="Select a booking time"></div>
+   </section>
+   <section id="details-panel" class="any-section any-step" hidden>
+     <div class="any-overline">02 / YOUR DETAILS</div>
+     <h3 id="selected-slot-title">Finish your booking</h3>
+     <p class="any-note">We'll assign an available barber. No payment is collected on this page.</p>
+     <form id="confirm-form" class="any-form">
+       <div class="any-two">
+         <div><label class="any-label" for="first-name">First name</label><input class="any-input" id="first-name" required maxlength="60" autocomplete="given-name"></div>
+         <div><label class="any-label" for="last-name">Surname</label><input class="any-input" id="last-name" required maxlength="60" autocomplete="family-name"></div>
+       </div>
+       <label class="any-label" for="email">Email address</label><input class="any-input" id="email" type="email" required maxlength="254" autocomplete="email">
+       <label class="any-label" for="phone">Mobile number</label><input class="any-input" id="phone" type="tel" required autocomplete="tel" placeholder="07123 456789">
+       <label class="any-check"><input type="checkbox" id="consent" required><span>I agree to Choppers processing my details to create this appointment with Square. See the <a href="https://choppersbarbers.co.uk/privacy-policy/" target="_blank" rel="noopener noreferrer">privacy policy</a>.</span></label>
+       <div id="captcha" aria-label="Security check"></div>
+       <button type="submit" class="book-button" id="confirm-button">Confirm booking <span aria-hidden="true">✓</span></button>
+     </form>
+     <p id="confirm-status" class="any-status" role="status" aria-live="polite"></p>
+   </section>
+   <section id="success-panel" class="any-section" role="status" aria-live="polite" hidden>
+     <div class="success-icon">✓</div>
+     <h3>You're booked!</h3>
+     <p id="success-copy"></p>
+     <p id="booking-ref" class="booking-ref"></p>
+     <a href="/" class="book-button">Return to Choppers <span aria-hidden="true">→</span></a>
+   </section>
+   <div class="powered">Bookings are confirmed by <b>Square Appointments</b>. Subject to availability.</div>
+ </section>
+</main>
+<footer class="site-footer"><span>CHOPPERS BARBERS · 210 BERMONDSEY STREET</span><a href="https://choppersbarbers.co.uk/">VISIT MAIN WEBSITE ↗</a></footer>
+<script src="/any.js" defer></script>
+</body></html>
