@@ -50,3 +50,87 @@
 #success-panel p{color:#d6d3ce;line-height:1.6}
 .booking-ref{font-size:12px;word-break:break-all}
 @media(max-width:520px){.any-section{padding:20px 17px}.slot-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.any-two{grid-template-columns:1fr;gap:0}}
+
+
+/* Booking selector v3: booking controls belong to each barber, not the footer. */
+.selector-page{max-width:780px;padding-top:60px}
+.selector-page .intro{margin-bottom:36px}
+.selector-page .intro h1{letter-spacing:-.063em}
+.selector-page .intro p{max-width:510px;margin:0 auto}
+.selector-page .booking-card{overflow:visible;border-color:#44413b;border-radius:21px}
+.selector-page .card-heading{background:linear-gradient(110deg,#242321 0%,#1c1e20 75%);border-radius:21px 21px 0 0;padding:27px 31px 24px}
+.selector-page .card-heading h2{font-size:22px}
+.selector-page .staff-count{padding:7px 10px;border:1px solid #534b40;border-radius:50px;color:#c6b393;background:#292620}
+.barber-list{display:block}
+.barber-row{border-bottom:1px solid #373837;background:#1d1e1f;transition:background .18s ease}
+.barber-row:last-child{border-bottom:0}
+.barber-row:hover{background:#242526}
+.barber-row.is-open{background:#282723}
+.barber-row-any{background:linear-gradient(100deg,#2a2621 0%,#222222 60%,#1e1e1e 100%)}
+.barber-row-any:hover,.barber-row-any.is-open{background:#302a23}
+.barber-main{display:grid;grid-template-columns:88px minmax(0,1fr) auto;align-items:center;column-gap:20px;min-height:129px;padding:19px 29px}
+.barber-portrait{display:block;width:88px;height:88px;object-fit:cover;border-radius:50%;border:3px solid #615547;background:#353435;box-shadow:0 5px 16px #0006;flex:none}
+.barber-row:not(.barber-row-any) .barber-portrait{border-color:#646364}
+.barber-portrait-any{display:grid;place-items:center;font-size:37px;font-weight:400;color:#e7c28c;background:#3b342b;border-color:#796043;box-shadow:inset 0 0 20px #1116}
+.barber-info{display:flex;flex-direction:column;gap:7px;min-width:0}
+.barber-display-name{font-size:22px;font-weight:800;line-height:1.15;letter-spacing:-.035em;color:#fcfbf7}
+.barber-description{font-size:12px;line-height:1.45;color:#adaeab}
+.barber-row-any .barber-display-name{color:#f1d4a5}
+.barber-book-toggle{display:flex;align-items:center;justify-content:center;gap:12px;border:1px solid #e6c28e;background:#eac48e;color:#1a1712;min-width:150px;min-height:48px;padding:12px 15px;border-radius:10px;font-size:14px;font-weight:850;letter-spacing:-.012em;box-shadow:0 2px 0 #0404044d;transition:background .15s,border-color .15s,transform .15s}
+.barber-book-toggle:hover{background:#f2d6aa;transform:translateY(-1px)}
+.barber-book-toggle:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.barber-book-toggle[aria-expanded="true"]{background:#fff0d6;border-color:#fff0d6}
+.barber-toggle-label{white-space:nowrap}
+.barber-toggle-arrow{font-size:22px;line-height:.5;transform:translateY(-2px);transition:transform .15s}
+.barber-book-toggle[aria-expanded="true"] .barber-toggle-arrow{transform:rotate(180deg) translateY(2px)}
+.barber-book-menu{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 29px 23px 137px;animation:barber-menu-appear .16s ease-out}
+.barber-book-menu[hidden]{display:none}
+@keyframes barber-menu-appear{from{opacity:.3;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+.barber-book-option{min-height:79px;background:#181a1a;border:1px solid #58534c;border-radius:11px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:17px 17px;color:#f3f1eb;transition:background .15s,border-color .15s,transform .15s}
+.barber-book-option:hover{border-color:#eac48e;background:#373026;transform:translateY(-1px)}
+.barber-book-option:focus-visible{outline:3px solid #eac48e;outline-offset:3px}
+.barber-option-body{display:flex;flex-direction:column;gap:6px;min-width:0}
+.barber-option-body strong{font-size:15px;line-height:1.25;font-weight:850;letter-spacing:-.02em}
+.barber-option-body small{color:#b2aca3;font-size:11px;line-height:1.35}
+.barber-option-arrow{font-size:19px;color:#edc38b;font-weight:400;flex:none}
+.selector-footnote{display:flex;align-items:flex-start;gap:11px;padding:21px 28px;border-top:1px solid #45423d;border-radius:0 0 20px 20px;background:#191a1a;color:#b5b5b1}
+.selector-footnote .footnote-icon{border:1px solid #70674f;color:#edc38b;border-radius:50%;font-weight:700;font-size:11px;width:22px;height:22px;display:grid;place-items:center;flex:none}
+.selector-footnote p{font-size:12px;line-height:1.6;margin:0}
+.selector-footnote strong{color:#ede9df}
+.selector-page .trust-row{margin-top:31px}
+@media(max-width:650px){
+ .selector-page{padding-top:42px}
+ .selector-page .card-heading{padding:23px 22px 20px}
+ .selector-page .card-heading h2{font-size:20px}
+ .barber-main{grid-template-columns:76px minmax(0,1fr) auto;column-gap:14px;min-height:115px;padding:16px 18px}
+ .barber-portrait{width:76px;height:76px}
+ .barber-portrait-any{font-size:32px}
+ .barber-display-name{font-size:20px}
+ .barber-book-toggle{min-width:135px;font-size:13px;min-height:46px;padding:11px 12px;gap:8px}
+ .barber-book-menu{padding:0 18px 19px 108px;gap:9px}
+ .barber-book-option{min-height:72px;padding:13px}
+}
+@media(max-width:440px){
+ .selector-page .card-heading{padding:21px 17px 18px}
+ .selector-page .card-heading h2{font-size:18px}
+ .selector-page .staff-count{font-size:8px;letter-spacing:.08em;padding:6px 8px}
+ .barber-main{grid-template-columns:68px minmax(0,1fr) auto;column-gap:10px;padding:15px 13px;min-height:100px}
+ .barber-portrait{width:68px;height:68px;border-width:2px}
+ .barber-portrait-any{font-size:29px}
+ .barber-display-name{font-size:17px;letter-spacing:-.03em}
+ .barber-description{font-size:10px;line-height:1.35}
+ .barber-book-toggle{font-size:12px;min-width:110px;min-height:43px;gap:6px;padding:9px 9px;border-radius:9px}
+ .barber-toggle-arrow{font-size:20px}
+ .barber-book-menu{grid-template-columns:1fr;padding:0 14px 16px 91px;gap:8px}
+ .barber-book-option{min-height:63px;padding:12px 13px}
+ .barber-option-body strong{font-size:14px}
+ .selector-footnote{padding:17px 15px}
+}
+@media(max-width:355px){
+ .barber-main{grid-template-columns:58px minmax(0,1fr) auto;column-gap:8px;padding-left:9px;padding-right:9px}
+ .barber-portrait{width:58px;height:58px}
+ .barber-book-toggle{min-width:100px;padding:9px 7px;font-size:11px}
+ .barber-display-name{font-size:16px}
+ .barber-book-menu{padding-left:74px;padding-right:10px}
+}
+@media(prefers-reduced-motion:reduce){.barber-book-menu{animation:none}.barber-book-toggle,.barber-book-option{transition:none}}
