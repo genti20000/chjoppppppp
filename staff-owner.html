@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><title>Choppers Owner · Staff Access</title><link rel="stylesheet" href="/style.css"></head>
+<body><header class="topbar"><a class="brand" href="/admin"><span class="brand-mark">✂</span><span>CHOPPERS <small>OWNER CONTROLS</small></span></a><a href="/admin" class="top-link">← BARBER ORDER</a></header>
+<main class="site-container owner-container">
+ <section class="intro"><div class="eyebrow">OWNER-ONLY CONTROLS</div><h1>Staff <em>access.</em></h1><p>Issue private sign-ins, register staff callback mobiles, reset passwords and disable access instantly.</p></section>
+ <div class="any-banner" id="owner-locked" hidden><b>Owner sign-in required.</b><p>Sign in through the existing administrator account first.</p><a class="book-button" href="/admin">Go to admin login →</a></div>
+ <div id="owner-content" hidden>
+  <section class="booking-card"><div class="card-heading"><div><span class="step">TEAM ACCOUNTS</span><h2>Access management</h2></div></div>
+   <div id="owner-list" class="owner-list"></div>
+   <div class="staff-disclaimer">Each employee should have their own login. The registered mobile receives masked call connections and must be owned or controlled by that employee.</div>
+  </section>
+  <section class="booking-card owner-create"><div class="card-heading"><div><span class="step">NEW STAFF LOGIN</span><h2>Create an account</h2></div></div>
+   <form id="create-staff" class="staff-form">
+     <label class="staff-label" for="new-barber">Barber</label>
+     <select id="new-barber" class="staff-input"><option value="liri">Liri</option><option value="marouan">Marouan</option><option value="nick">Nick</option><option value="victor">Victor</option></select>
+     <label class="staff-label" for="new-username">Username</label>
+     <input id="new-username" class="staff-input" autocomplete="off" autocapitalize="none" required minlength="3" placeholder="e.g. victor">
+     <label class="staff-label" for="new-phone">Barber's callback mobile</label>
+     <input id="new-phone" class="staff-input" type="tel" required placeholder="07123 456789">
+     <button class="book-button" type="submit">Create staff login <span aria-hidden="true">→</span></button>
+   </form>
+  </section>
+  <div class="owner-credentials" id="owner-secret" hidden>
+   <b>One-time password: copy it now</b>
+   <p>For security, this password won't be displayed again. Share it privately with the barber, not in a group chat.</p>
+   <code id="one-time-password"></code>
+   <button id="copy-password" type="button">Copy password</button>
+  </div>
+ </div>
+ <p id="owner-message" class="staff-status" role="status" aria-live="polite"></p>
+</main><script src="/staff-owner.js" defer></script></body></html>
