@@ -6,8 +6,8 @@ A mobile-first, Square-powered booking selector for Choppers Barbers, 210 Bermon
 
 - **Any Barber** always appears first.
 - Real current Choppers barber names and Square profile photos: **Liri, Marouan, Nick, Victor**.
-- Tap to select a barber; **Book with …** opens that barber's published Square link for Monday–Friday. A separate Saturday button opens the barber's SimplyBook page.
-- Owner-only **/admin** screen can reorder staff using arrows or desktop drag-and-drop and assign a staff-specific Square booking/widget URL to each barber.
+- Tap Any Barber or a named barber; one **Book Appointment** button opens a dropdown: **Square Appointments (Mon–Fri)** or **SimplyBook (Saturday)**. Both destinations use the selected barber, with official general links for Any Barber.
+- Owner-only **/admin** screen reorders staff using arrows or desktop drag-and-drop and can update existing staff-specific Square booking URLs. Any Barber stays at the top.
 - With Supabase configured, changes save centrally and appear for every visitor. No Square API key is required for this link-based solution.
 - Styling follows Choppers branding. The website itself is independent of the WordPress Choppers site.
 
@@ -66,7 +66,7 @@ Add a WordPress link/button to your new Vercel domain (e.g. /book or book.choppe
 Only change the current WordPress booking button after you have verified the new site and all links.
 
 ## Notes
-- **Any Barber** offers the general Square booking page for Mon–Fri and the general SimplyBook page for Saturday.
+- **Any Barber** is the default selection and offers the general Square booking page for Mon–Fri and the general SimplyBook page for Saturday. Square may still require customers to choose “Any staff” within its own booking flow. That internal selection cannot be skipped reliably with the public link.\n- The dropdown is one button, then two provider choices. There is no duplicate booking button.
 - This app does not edit Square's own internal staff order. It controls only the staff order on your custom page.
 - Staff are currently hardcoded from the verified live Square Haircut service as of 1 November 2026; if Square's staff changes, update this source or add an API sync.
 - Genuine photos are loaded from Square's public CDN. If Square changes those URLs, photos may need updating.
