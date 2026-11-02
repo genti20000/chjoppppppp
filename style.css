@@ -16,3 +16,37 @@
 .booking-option-body strong{font-size:15px;font-weight:800}
 .booking-option-body small{font-size:12px;color:#bbb7af}
 .booking-option-arrow{font-size:20px;color:var(--gold)}
+
+/* Automatic Any Barber booking screens */
+.any-container{max-width:700px}
+.back-link{display:inline-flex;margin-bottom:22px;color:var(--gold);font-size:13px;font-weight:750}
+.any-banner{border:1px solid #8e795e;background:#332c22;border-radius:16px;padding:25px;margin:20px 0}
+.any-banner strong{font-size:19px}
+.any-banner p{font-size:14px;line-height:1.6;color:#e7dfd2}
+.any-banner .book-button{font-size:14px}
+.any-section{padding:26px}
+.any-label{display:block;color:#d4d4d1;font-size:13px;font-weight:750;margin:0 0 9px}
+.any-input{background:#111313;border:1px solid #656562;color:var(--white);padding:13px 14px;border-radius:9px;width:100%;min-height:48px;margin-bottom:19px;color-scheme:dark;outline:none;font-size:15px}
+.any-input:focus{border-color:var(--gold);box-shadow:0 0 0 2px #eac48e33}
+.any-section h3{font-size:23px;margin:0 0 12px}
+.any-section a:not(.book-button){color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+.any-step{border-top:1px solid var(--line)}
+.any-overline{color:var(--gold);font-size:10px;font-weight:800;letter-spacing:.17em;margin-bottom:13px}
+.any-note{color:var(--muted);font-size:13px;line-height:1.6;margin:0 0 21px}
+.any-service-extra{font-size:12px;color:var(--gold);margin-top:-11px;margin-bottom:20px}
+.any-status{color:var(--gold);font-size:13px;line-height:1.5;margin-top:16px}
+.any-status:empty{display:none}
+.slot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.slot-button{min-height:48px;background:#252625;color:var(--white);border:1px solid #5b5d5b;border-radius:9px;font-size:14px;font-weight:750}
+.slot-button:hover,.slot-button:focus-visible{outline:none;border-color:var(--gold)}
+.slot-button.active{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.any-form{display:grid;gap:0}
+.any-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.any-check{display:flex;gap:11px;color:#c6c8c5;font-size:12px;line-height:1.6;margin:3px 0 20px;align-items:flex-start}
+.any-check input{accent-color:var(--gold);height:18px;width:18px;flex:none;margin-top:1px}
+#captcha{min-height:66px;margin-bottom:20px}
+#success-panel{text-align:center}
+.success-icon{width:66px;height:66px;display:grid;place-items:center;color:var(--black);background:var(--gold);font-size:32px;font-weight:900;border-radius:50%;margin:8px auto 20px}
+#success-panel p{color:#d6d3ce;line-height:1.6}
+.booking-ref{font-size:12px;word-break:break-all}
+@media(max-width:520px){.any-section{padding:20px 17px}.slot-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.any-two{grid-template-columns:1fr;gap:0}}
