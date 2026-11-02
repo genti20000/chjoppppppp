@@ -24,9 +24,39 @@
   const NAMES = {liri:'Liri',marouan:'Marouan ⚽',nick:'Nick',victor:'Victor'};
   let settings = DEFAULT, selected = 'any';
   const list = document.getElementById('barber-list');
-  const button = document.getElementById('book-button');
-  const saturdayButton = document.getElementById('saturday-button');
+  const bookingControl = document.getElementById('booking-control');
+  const toggle = document.getElementById('booking-toggle');
+  const toggleLabel = document.getElementById('booking-toggle-label');
+  const bookingMenu = document.getElementById('booking-menu');
+  const squareOption = document.getElementById('square-option');
+  const saturdayOption = document.getElementById('saturday-option');
+  const squareChoiceLabel = document.getElementById('square-choice-label');
+  const saturdayChoiceLabel = document.getElementById('saturday-choice-label');
   const hint = document.getElementById('booking-hint');
+  function closeMenu() {
+    bookingMenu.hidden = true;
+    toggle.setAttribute('aria-expanded','false');
+  }
+  function openMenu() {
+    bookingMenu.hidden = false;
+    toggle.setAttribute('aria-expanded','true');
+    squareOption.focus();
+  }
+  toggle.addEventListener('click',function(){
+    if(bookingMenu.hidden) openMenu();
+    else closeMenu();
+  });
+  document.addEventListener('click',function(e){
+    if(!bookingControl.contains(e.target)) closeMenu();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && !bookingMenu.hidden) {
+      closeMenu();toggle.focus();
+    }
+  });
+  [squareOption,saturdayOption].forEach(function(link){
+    link.addEventListener('click',closeMenu);
+  });
   function choose(id) { selected = id; render(); }
   function row(id) {
     const isAny = id === 'any', name = isAny ? 'Any Barber' : NAMES[id], element = document.createElement('button');
@@ -46,14 +76,16 @@
   function render() {
     list.replaceChildren(row('any'), ...settings.order.map(row));
     const name=selected==='any'?'Any Barber':NAMES[selected];
-    button.replaceChildren(document.createTextNode('Book with '+name+' '));
-    const arrow=document.createElement('span');arrow.textContent='↗';arrow.setAttribute('aria-hidden','true');button.append(arrow);
+    closeMenu();
+    toggleLabel.textContent = selected === 'any' ? 'Book Appointment' : 'Book with '+name;
     const direct = selected==='any' ? BASE : ((settings.links && settings.links[selected]) || SQUARE_LINKS[selected]);
-    button.href=direct;
-    button.target='_blank';button.rel='noopener noreferrer';
-    saturdayButton.href = selected==='any' ? SATURDAY_ANY : SATURDAY_LINKS[selected];
-    saturdayButton.textContent = selected==='any' ? 'Book Saturday · Any Barber ↗' : 'Book Saturday · '+name+' ↗';
-    hint.textContent=selected==='any'?'Choose any available barber. Weekday bookings use Square; Saturdays use SimplyBook.':'Weekdays: book '+name+' through Square. Saturday: use the separate SimplyBook link.';
+    squareOption.href = direct;
+    saturdayOption.href = selected==='any' ? SATURDAY_ANY : SATURDAY_LINKS[selected];
+    squareChoiceLabel.textContent=name;
+    saturdayChoiceLabel.textContent=name;
+    hint.textContent = selected === 'any'
+      ? 'No preference? Choose the booking platform below and select “Any staff” when asked.'
+      : 'Choose your booking platform below to book with '+name+'.';
   }
   fetch('/api/config',{cache:'no-store'}).then(function(r){if(!r.ok)throw Error('Config');return r.json();})
     .then(function(c){if(Array.isArray(c.order)&&c.order.length===4) settings=c;render();})
