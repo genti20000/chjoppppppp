@@ -1,4 +1,4 @@
-name: Choppers API checks
+name: Choppers API checks (manual until billing resolved)
 on:
   workflow_dispatch:
 jobs:
@@ -19,4 +19,4 @@ jobs:
           node --check any.js
           node --check public.js
       - name: Run Square API mocked unit tests
-        run: node --test test/square-any.test.js
+        run: npm test
