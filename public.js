@@ -31,6 +31,7 @@
   const squareOption = document.getElementById('square-option');
   const saturdayOption = document.getElementById('saturday-option');
   const squareChoiceLabel = document.getElementById('square-choice-label');
+  const squareOptionTitle = document.getElementById('square-option-title');
   const saturdayChoiceLabel = document.getElementById('saturday-choice-label');
   const hint = document.getElementById('booking-hint');
   function closeMenu() {
@@ -79,7 +80,9 @@
     closeMenu();
     toggleLabel.textContent = selected === 'any' ? 'Book Appointment' : 'Book with '+name;
     const direct = selected==='any' ? BASE : ((settings.links && settings.links[selected]) || SQUARE_LINKS[selected]);
-    squareOption.href = direct;
+    squareOption.href = selected === 'any' ? '/any' : direct;
+    squareOption.target = selected === 'any' ? '_self' : '_blank';
+    squareOptionTitle.textContent = selected === 'any' ? 'Automatic booking via Square' : 'Square Appointments';
     saturdayOption.href = selected==='any' ? SATURDAY_ANY : SATURDAY_LINKS[selected];
     squareChoiceLabel.textContent=name;
     saturdayChoiceLabel.textContent=name;
