@@ -7,11 +7,25 @@
     nick: 'https://appointments-production-f.squarecdn.com/files/09502eb1799cdfb52bfc55e151be1627/original.jpg?width=60&height=60&fit=crop&enable=upscale&dpr=1',
     victor: 'https://appointments-production-f.squarecdn.com/files/95e5fff5e23e446a637a6ca0108d1231/original.jpg?width=60&height=60&fit=crop&enable=upscale&dpr=1'
   };
-  const DEFAULT = {order: ['liri','marouan','nick','victor'], links: {}};
+  const SQUARE_LINKS = {
+  "liri": "https://squareup.com/appointments/book/5b02w9466dexxu/LDBX5380WHX98/services",
+  "marouan": "https://squareup.com/appointments/book/ycy9pbpbxlrgy8/LDBX5380WHX98/services",
+  "nick": "https://squareup.com/appointments/book/yqs1tx0qnxicha/LDBX5380WHX98/services",
+  "victor": "https://book.squareup.com/appointments/cqxqe8k9vaad1m/location/LDBX5380WHX98/services"
+};
+  const SATURDAY_LINKS = {
+  "liri": "https://choppersbarbers.simplybook.it/v2/#book/provider/4",
+  "marouan": "https://choppersbarbers.simplybook.it/v2/#book/provider/5",
+  "nick": "https://choppersbarbers.simplybook.it/v2/#book/provider/10",
+  "victor": "https://choppersbarbers.simplybook.it/v2/#book/provider/3"
+};
+  const SATURDAY_ANY = 'https://choppersbarbers.simplybook.it/';
+  const DEFAULT = {order: ['liri','marouan','nick','victor'], links: SQUARE_LINKS};
   const NAMES = {liri:'Liri',marouan:'Marouan ⚽',nick:'Nick',victor:'Victor'};
   let settings = DEFAULT, selected = 'any';
   const list = document.getElementById('barber-list');
   const button = document.getElementById('book-button');
+  const saturdayButton = document.getElementById('saturday-button');
   const hint = document.getElementById('booking-hint');
   function choose(id) { selected = id; render(); }
   function row(id) {
@@ -34,10 +48,12 @@
     const name=selected==='any'?'Any Barber':NAMES[selected];
     button.replaceChildren(document.createTextNode('Book with '+name+' '));
     const arrow=document.createElement('span');arrow.textContent='↗';arrow.setAttribute('aria-hidden','true');button.append(arrow);
-    const custom=selected!=='any'&&settings.links&&settings.links[selected];
-    button.href=custom || BASE;
+    const direct = selected==='any' ? BASE : ((settings.links && settings.links[selected]) || SQUARE_LINKS[selected]);
+    button.href=direct;
     button.target='_blank';button.rel='noopener noreferrer';
-    hint.textContent=selected==='any'?'Any Barber gives you the widest choice of appointments.':custom?'Continue with '+name+' on Square.':'Square will ask you to select '+name+' again after choosing your service.';
+    saturdayButton.href = selected==='any' ? SATURDAY_ANY : SATURDAY_LINKS[selected];
+    saturdayButton.textContent = selected==='any' ? 'Book Saturday · Any Barber ↗' : 'Book Saturday · '+name+' ↗';
+    hint.textContent=selected==='any'?'Choose any available barber. Weekday bookings use Square; Saturdays use SimplyBook.':'Weekdays: book '+name+' through Square. Saturday: use the separate SimplyBook link.';
   }
   fetch('/api/config',{cache:'no-store'}).then(function(r){if(!r.ok)throw Error('Config');return r.json();})
     .then(function(c){if(Array.isArray(c.order)&&c.order.length===4) settings=c;render();})
