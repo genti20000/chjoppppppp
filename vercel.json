@@ -1,8 +1,33 @@
 {
   "version": 2,
-  "rewrites": [{"source": "/admin", "destination": "/admin.html"}],
+  "rewrites": [
+    {
+      "source": "/any",
+      "destination": "/any.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    }
+  ],
   "headers": [
-    {"source": "/admin", "headers": [{"key": "X-Robots-Tag", "value": "noindex, nofollow"}]},
-    {"source": "/admin.html", "headers": [{"key": "X-Robots-Tag", "value": "noindex, nofollow"}]}
+    {
+      "source": "/admin",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/admin.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
   ]
 }
