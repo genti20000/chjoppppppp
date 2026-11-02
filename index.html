@@ -22,9 +22,25 @@
  </div>
  <div class="booking-footer">
   <p id="booking-hint" class="booking-hint" aria-live="polite">Any barber gives you the widest choice of appointments.</p>
-  <a id="book-button" href="https://book.squareup.com/appointments/zqexq32vqp1hkn/location/LDBX5380WHX98/services" class="book-button">Book Mon–Fri with Any Barber <span aria-hidden="true">↗</span></a>
-  <a id="saturday-button" class="saturday-button" href="https://choppersbarbers.simplybook.it/" target="_blank" rel="noopener noreferrer">Book Saturday · Any Barber ↗</a>
-  <div class="powered">Your appointment is completed securely through <b>Square</b>.</div>
+  <div id="booking-control" class="booking-control">
+    <button id="booking-toggle" type="button" class="book-button booking-toggle" aria-expanded="false" aria-controls="booking-menu">
+      <span id="booking-toggle-label">Book Appointment</span>
+      <span class="booking-chevron" aria-hidden="true">⌄</span>
+    </button>
+    <div id="booking-menu" class="booking-menu" role="group" aria-label="Choose booking platform" hidden>
+      <a id="square-option" class="booking-option" href="https://book.squareup.com/appointments/zqexq32vqp1hkn/location/LDBX5380WHX98/services" target="_blank" rel="noopener noreferrer">
+        <span class="booking-option-icon" aria-hidden="true">▣</span>
+        <span class="booking-option-body"><strong>Square Appointments</strong><small>Monday – Friday · <span id="square-choice-label">Any Barber</span></small></span>
+        <span class="booking-option-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a id="saturday-option" class="booking-option" href="https://choppersbarbers.simplybook.it/" target="_blank" rel="noopener noreferrer">
+        <span class="booking-option-icon" aria-hidden="true">▦</span>
+        <span class="booking-option-body"><strong>SimplyBook</strong><small>Saturday · <span id="saturday-choice-label">Any Barber</span></small></span>
+        <span class="booking-option-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+  <div class="powered">Booking is completed securely on <b>Square</b> or <b>SimplyBook</b>.</div>
  </div>
 </section>
 <div class="trust-row"><span>✦ EXPERIENCED BARBERS</span><span>✦ FLEXIBLE APPOINTMENTS</span><span>✦ LONDON BRIDGE</span></div>
