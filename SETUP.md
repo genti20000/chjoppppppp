@@ -73,3 +73,7 @@ Only change the current WordPress booking button after you have verified the new
 - Security: service-role key is server-only; cookie is HttpOnly/SameSite; links are restricted to HTTPS Square hostnames. Use HTTPS, a strong owner password, and rate limiting at the Vercel/edge layer for production.
 - Password-based login is a small-project convenience; for multiple admins, replace with proper identity-based authentication.
 - No appointment or customer data is copied into this site. All actual bookings are completed on Square.
+
+## UI update (2 November 2026)
+
+The customer booking controls now sit beside each barber's name and enlarged profile photograph. Click the respective Book button to reveal the two day-specific booking links inline. Opening one dropdown closes any previous open dropdown; Escape closes it too. Display order still comes from `/api/config`, so `/admin` reordering continues to work once Supabase is configured. The public site remains responsive down to small mobile widths.
