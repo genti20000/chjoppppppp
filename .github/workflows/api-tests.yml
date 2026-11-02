@@ -1,0 +1,24 @@
+name: Choppers API checks
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate JS syntax
+        run: |
+          node --check lib/square-any.js
+          node --check api/any/availability.js
+          node --check api/any/confirm.js
+          node --check any.js
+          node --check public.js
+      - name: Run Square API mocked unit tests
+        run: node --test test/square-any.test.js
