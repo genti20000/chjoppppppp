@@ -4,7 +4,7 @@ Built 2 November 2026. Repository: https://github.com/genti20000/chjoppppppp
 
 ## What is included
 
-- **/staff**: mobile-first staff-only login and schedule. Each barber sees only bookings in their own Square calendar. Each appointment shows time, duration, service and reference price. The API deliberately does NOT return customer name, phone, email, customer ID, or booking notes.
+- **/staff**: mobile-first staff-only login and schedule. Each barber sees only bookings in their own Square calendar. Each appointment shows time, duration, service and reference price, plus **first name + surname initial**, **last three digits of the phone**, and **first three characters of the email's local part**. Square's full phone/email, customer ID, full surname and notes are not returned.
 - **Call Customer**: server checks the authenticated barber owns the booking, fetches the customer number privately from Square, then uses Twilio to ring the barber's registered phone and bridge the customer. Both legs use a Choppers business caller ID. No customer number appears in the browser, HTML, links or server response. No recording by default.
 - **Square Register**: staff use their own restricted Square Register PIN to charge cards on the existing dual-screen hardware. This app does NOT charge customers or mark transactions paid. Staff see reference service prices only.
 - **/staff/owner**: owner-only staff provisioning, protected by the existing /admin owner login. Create each barber's account, register callback number, disable access, rotate passwords. Passwords are generated once and stored salted using scrypt.
@@ -62,7 +62,7 @@ Owner should create a restricted Square permission set for each barber's Registe
 
 - Keep all Square, Supabase and Twilio tokens as encrypted server-side Vercel environment variables.
 - Use separate barbers' individual accounts; share neither the owner password nor the Square API tokens with staff.
-- Square customer info stays on server; browser gets only date/time, service, duration, reference price, booking ID and status.
+- Square full customer records stay on the server; browser receives only the assigned appointment's first name, surname initial, masked phone suffix and masked email prefix, plus the booking time, service, duration, reference price, booking ID and status. The browser has no phone/email links or raw profile fields.
 - Twilio presents the company number on both call legs. A customer who independently tells a barber their number, or a barber who can access customer details through Square Register/other systems, is outside this app's control.
 - Calls are not recorded by this application. Check Twilio and carrier-level settings separately.
 - Store minimal call audit records without customer numbers or emails. Review retention and UK GDPR requirements and add a written staff privacy policy.
@@ -76,7 +76,7 @@ Owner should create a restricted Square permission set for each barber's Registe
 - Provision an actual barber user and check login/logout/disable/rotate.
 - Using a seller-authorized Square token, verify each staff account maps uniquely to one of Liri, Marouan, Nick or Victor in Square booking profiles.
 - Verify bookings appear for the right staff member; cross-barber booking IDs are rejected by /api/staff/call.
-- Confirm customer email, full name and phone never appear in frontend API responses or browser dev tools.
+- Confirm full customer emails, surnames, phone numbers, IDs and notes never appear in frontend API responses or browser dev tools; only permitted masked hints appear. Verify the Square token has CUSTOMERS_READ. Without that permission the calendar still loads, but customer hints show as unavailable.
 - Test a masked call from the barber's registered phone. The barber and customer should both see the Choppers business caller ID. Confirm no recording.
 - Check unsuccessful customer phone and rate limit handling.
 - Test restricted Square Register staff PIN at the physical shop for checkout and blocked customer directory access.
@@ -87,3 +87,7 @@ The new GitHub test suite contains **test/staff.test.js**, with privacy, role-sc
 ### Current delivery status
 
 The source files are committed and Vercel builds are automatic. This is a **secure implementation pending connections**, NOT a working or verified live masked-call system. No live Square customer data has been read, no actual calls have been made, and no paid calls have been initiated.
+
+## Staff customer recognition (3 November 2026)
+
+Customer hints are generated **server-side** from Square's `BulkRetrieveCustomers` API (up to 100 customers per selected date), after filtering bookings to the signed-in barber. Each appointment displays a first name and surname initial (e.g. **James S.**), phone last three digits (**••• 123**) and email local part first three characters (**jam•••**, with the entire domain hidden). No full email, full phone, Square customer ID or private customer note is serialized into the staff response. If customer records or the `CUSTOMERS_READ` permission are missing, identifiers safely fall back to **unavailable**, without breaking the appointment schedule. The owner must still restrict employee access to Square Customer Directory and Square Register customer views separately.
