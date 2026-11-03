@@ -7,6 +7,12 @@ module.exports=async function(req,res){
  if(req.method!=='GET'){res.setHeader('Allow','GET');return res.status(405).json({error:'Method not allowed.'});}
  try{
   const user=await s.requireStaff(req);
+  // Use a single Vercel function for both the PII-free calendar and clicked details.
+  // The details mode still requires a valid staff session and returns masked hints only.
+  if(typeof req.query?.id==='string'&&req.query.id.length){
+   const record=await c.detail(user,req.query.id);
+   return res.status(200).json(record);
+  }
   const result=await c.calendar(user,String(req.query?.start||''),String(req.query?.end||''),
     String(req.query?.barber||user.barber_id));
   return res.status(200).json(result);
