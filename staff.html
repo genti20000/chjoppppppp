@@ -8,7 +8,7 @@
 </head><body>
 <header class="topbar"><a class="brand" href="https://choppersbarbers.co.uk/"><span class="brand-mark" aria-hidden="true">✂</span><span>CHOPPERS <small>PRIVATE STAFF PORTAL</small></span></a><span class="secure"><span class="secure-dot"></span> PRIVATE ACCESS</span></header>
 <main class="site-container staff-container">
- <section class="intro staff-intro"><div class="eyebrow">CHOPPERS · LONDON BRIDGE</div><h1>Staff <em>dashboard.</em></h1><p>Today's work, without exposing customer contact details.</p></section>
+ <section class="intro staff-intro"><div class="eyebrow">CHOPPERS · LONDON BRIDGE</div><h1>Staff <em>dashboard.</em></h1><p>Your appointments, with customer details shown only in a limited, masked form.</p></section>
  <section id="login-panel" class="booking-card staff-login-card">
    <div class="card-heading"><div><span class="step">TEAM SIGN IN</span><h2>Your private account</h2></div><span class="staff-count">STAFF ONLY</span></div>
    <form id="staff-login" class="staff-form">
@@ -19,11 +19,11 @@
      <button id="login-button" class="book-button" type="submit">Sign in <span aria-hidden="true">→</span></button>
      <p class="staff-status" id="login-status" role="status" aria-live="polite"></p>
    </form>
-   <div class="staff-disclaimer">Your password is issued by the owner. Customers' phone numbers and email addresses are not shown to staff.</div>
+   <div class="staff-disclaimer">Your password is issued by the owner. Staff see customer first name, surname initial, the last three phone digits and first three email characters. Full contact details are not shown.</div>
  </section>
  <section id="staff-panel" hidden>
    <div class="staff-profilebar"><div><span class="step">WELCOME BACK</span><h2 id="welcome">Your appointments</h2></div><button class="staff-logout" id="logout" type="button">Sign out <span aria-hidden="true">↗</span></button></div>
-   <div class="staff-privacy"><span class="staff-privacy-symbol">🔒</span><div><b>Customer information is protected</b><small>Contact details and customer profiles stay hidden. Calls are connected using our business number.</small></div></div>
+   <div class="staff-privacy"><span class="staff-privacy-symbol">🔒</span><div><b>Customer information is protected</b><small>You'll see only the customer's first name, surname initial, phone's last three digits and email's first three characters. Full contact details stay private; calls use our business number.</small></div></div>
    <section class="booking-card staff-schedule">
      <div class="card-heading"><div><span class="step">YOUR SCHEDULE</span><h2>Appointments</h2></div><span id="count" class="staff-count">0 BOOKED</span></div>
      <div class="staff-daybar"><label for="staff-date">Date</label><input id="staff-date" class="staff-input" type="date" required><button id="refresh" class="staff-refresh" type="button" title="Refresh appointments">↻ Refresh</button></div>
