@@ -14,7 +14,7 @@
     nick:'https://appointments-production-f.squarecdn.com/files/09502eb1799cdfb52bfc55e151be1627/original.jpg?width=60&height=60&fit=crop&enable=upscale&dpr=1',
     victor:'https://appointments-production-f.squarecdn.com/files/95e5fff5e23e446a637a6ca0108d1231/original.jpg?width=60&height=60&fit=crop&enable=upscale&dpr=1'
   };
-  let data={order:IDS.slice(),links:{}},dragged=null;
+  let data={order:IDS.slice(),links:{}},dragged=null,storageReady=false;
   const list=document.getElementById('editor-list'), message=document.getElementById('message'), editor=document.getElementById('editor-panel'), login=document.getElementById('login-panel');
   function tell(text){message.textContent=text;}
   async function api(url,opts){const r=await fetch(url,opts);const j=await r.json().catch(function(){return {};});if(!r.ok)throw Error(j.error || ('Server error '+r.status));return j;}
@@ -40,10 +40,50 @@
     return el;
   }
   function paint(){list.replaceChildren(...data.order.map(row));}
-  async function load(){const config=await api('/api/config');data.order=Array.isArray(config.order)?config.order:IDS.slice();data.links=Object.fromEntries(IDS.map(id=>[id,(config.links&&config.links[id])||PRESET_LINKS[id]]));paint();document.getElementById('storage-warning').hidden=!!config.storageReady;}
+  function showStorageStatus(issue){
+    storageReady=!issue;
+    const warning=document.getElementById('storage-warning');
+    warning.hidden=storageReady;
+    document.getElementById('save').disabled=!storageReady;
+    document.getElementById('save-note').hidden=storageReady;
+    const title=document.getElementById('storage-warning-title');
+    const info=document.getElementById('storage-warning-text');
+    if(issue==='booking-table-not-found'){
+      title.textContent='The barber-order table is missing (404)';
+      info.textContent='Your staff tables are separate. Run schema.sql in the SAME Malandra Supabase project to create choppers_booking_config, then click Retry connection.';
+    }else if(issue==='missing-credentials'){
+      title.textContent='Barber-order saving is not configured';
+      info.textContent='The server needs its Supabase URL and private key. Check the Vercel environment settings; barber changes cannot be published yet.';
+    }else if(issue){
+      title.textContent='Barber-order database is temporarily unavailable';
+      info.textContent='The barber list below is a preview. Check the Malandra database, then retry. Do not assume your changes have saved.';
+    }
+  }
+  async function load(){
+    const config=await api('/api/config');
+    data.order=Array.isArray(config.order)?config.order:IDS.slice();
+    data.links=Object.fromEntries(IDS.map(id=>[id,(config.links&&config.links[id])||PRESET_LINKS[id]]));
+    paint();
+    showStorageStatus(config.storageReady?null:(config.storageIssue||'database-unavailable'));
+  }
   async function session(){try{const s=await api('/api/auth');if(s.authenticated){login.hidden=true;editor.hidden=false;await load();}else{login.hidden=false;editor.hidden=true;}}catch(e){tell(e.message);}}
   document.getElementById('login-form').addEventListener('submit',async function(e){e.preventDefault();tell('');try{await api('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.getElementById('password').value})});document.getElementById('password').value='';await session();}catch(err){tell(err.message);}});
   document.getElementById('logout').addEventListener('click',async function(){await api('/api/auth',{method:'DELETE'});await session();tell('Signed out.');});
-  document.getElementById('save').addEventListener('click',async function(){tell('Saving…');try{await api('/api/config',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});tell('Saved! The public booking page now uses this order.');}catch(e){tell(e.message);}});
+  document.getElementById('storage-retry').addEventListener('click',async function(){
+    tell('Checking the barber-order database…');
+    try{await load();tell(storageReady?'Connected. Barber-order changes can now be saved.':'The barber-order database still needs attention.');}
+    catch(e){showStorageStatus('database-unavailable');tell('Unable to check connection. '+e.message);}
+  });
+  document.getElementById('save').addEventListener('click',async function(){
+    if(!storageReady){tell('Changes were not saved. Set up the barber-order database first.');return;}
+    tell('Saving…');
+    try{
+      await api('/api/config',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+      tell('Saved! The public booking page now uses this order.');
+    }catch(e){
+      tell('Changes were not saved. '+e.message);
+      if(e.message.includes('Database unavailable'))showStorageStatus('database-unavailable');
+    }
+  });
   session();
 })();
