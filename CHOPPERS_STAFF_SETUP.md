@@ -30,11 +30,21 @@ Built 2 November 2026. Repository: https://github.com/genti20000/chjoppppppp
 4. For masked phone calling, add:
    - TWILIO_ACCOUNT_SID = your Twilio account SID, starts AC
    - TWILIO_AUTH_TOKEN = server-only Twilio auth token
-   - TWILIO_PHONE_NUMBER = a Twilio voice-enabled UK business number, in E.164 format (+44...)
-   - Fund the Twilio account and check UK voice number requirements. Both phone legs incur Twilio charges. Twilio may require an account upgrade/verified numbers before calling production mobiles.
+   - TWILIO_CALLER_ID = **Choppers' existing business telephone number**, after verifying it as an Outgoing Caller ID in Twilio, in +44 format. Alternatively use a Twilio-owned voice number. The old TWILIO_PHONE_NUMBER variable remains supported.
+   - Create and fund a Twilio account; verify the existing Choppers business number as an outgoing caller ID. A second Twilio phone number is not required for this outbound-only workflow. Incoming callbacks to the existing shop number continue through the existing phone provider. Both outgoing call legs incur Twilio usage charges. A trial account may only call verified destination numbers.
 5. Redeploy the Vercel project so the environment variables are loaded. For testing, keep access behind Vercel deployment authentication, then enable staff access on the designated private domain once ready.
 6. Sign in to **/admin** using the owner password, then open **/staff/owner**. Create the barber accounts with each barber's mobile number. Copy the *one-time* password for each barber and share individually using a secure channel. The password will never be shown again. Change or disable accounts from this screen.
 7. Ask each barber to sign in at **/staff** on their own phone. They should see ONLY their own Square appointments. Never share the owner admin password with barbers.
+
+## Quick Twilio activation (outbound-only, no new number required)
+
+1. Create an account at https://www.twilio.com/try-twilio and enable Programmable Voice. Add billing/upgrade if required for production calls to unverified customer numbers.
+2. Open Twilio Console > Phone Numbers > Verified Caller IDs and verify **Choppers' existing, answerable business telephone number** by completing Twilio's voice verification challenge.
+3. In Vercel set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_CALLER_ID (in +44 E.164 format). These must be encrypted environment variables. Do not paste any credentials into chat or GitHub.
+4. Staff call flow: Twilio first rings the staff member's owner-registered mobile, then bridges to the actual customer. Each leg uses the verified Choppers caller ID. The customer and barber can both see Choppers' number, not each other's private numbers.
+5. Confirm business caller-ID presentation and real calls on UK networks before switching the calling feature on for staff. The caller-ID presentation depends on carriers and cannot be absolutely guaranteed.
+
+Sources: https://help.twilio.com/articles/223132667-Do-I-have-to-buy-a-phone-number-to-make-outgoing-calls and https://www.twilio.com/docs/voice/api/call-resource.
 
 ## Payment security on the dual-screen Square Register
 
