@@ -23,7 +23,7 @@ const day=localDay(new Date(start));
 const booking={id:'BOOKING123',status:'ACCEPTED',location_id:process.env.SQUARE_LOCATION_ID,
  customer_id:'CUST_ID',start_at:start,
  appointment_segments:[{team_member_id:'TEAMVICTOR',service_variation_id:'VARHAIRCUT',duration_minutes:30}]};
-let twilioRequest=null,rateCalls=0,customerReads=0;
+let twilioRequest=null,rateCalls=0,customerReads=0,bulkReads=0,denyCustomerRead=false;
 function json(data,status=200){return {ok:status>=200&&status<300,status,text:async()=>JSON.stringify(data),json:async()=>data};}
 global.fetch=async(url,options={})=>{
  const u=String(url);
@@ -38,6 +38,13 @@ global.fetch=async(url,options={})=>{
  if(u.includes('/v2/catalog/batch-retrieve'))return json({objects:[{type:'ITEM_VARIATION',id:'VARHAIRCUT',item_variation_data:{
   item_id:'ITEM_HAIR',price_money:{amount:3900,currency:'GBP'},name:'Regular'}}],
   related_objects:[{type:'ITEM',id:'ITEM_HAIR',item_data:{name:'Haircut'}}]});
+ if(u.includes('/v2/customers/bulk-retrieve')){
+  bulkReads++;
+  const query=JSON.parse(options.body);
+  assert.deepEqual(query.customer_ids,['CUST_ID']);
+  if(denyCustomerRead)return json({errors:[{code:'UNAUTHORIZED'}]},403);
+  return json({responses:{CUST_ID:{customer:{id:'CUST_ID',given_name:'Private',family_name:'Customer',email_address:'private@example.com',phone_number:'+447700900222',note:'SECRET NOTE'}}}});
+ }
  if(u.includes('/v2/bookings/BOOKING123'))return json({booking});
  if(u.includes('/v2/bookings/NICKONLY'))return json({booking:{...booking,id:'NICKONLY',appointment_segments:[
   {team_member_id:'TEAMNICK',service_variation_id:'VARHAIRCUT',duration_minutes:30}]}});
@@ -66,16 +73,32 @@ test('valid staff can authenticate; owner password reset instantly revokes old s
  await assert.rejects(staff.requireStaff(req),e=>e.status===401);
  nonce='nonce-for-test-session';
 });
-test('appointment response excludes customer names, numbers, email and identifiers',async()=>{
+test('staff sees ONLY permitted masked customer hints for an assigned booking',async()=>{
  const response=await staff.appointments(userSession(),day);
  assert.equal(response.length,1);
  assert.equal(response[0].id,'BOOKING123');
  assert.equal(response[0].service,'Haircut');
  assert.equal(response[0].estimated_price_pence,3900);
+ assert.deepEqual(response[0].customer,{
+  name:'Private C.',
+  phone_hint:'••• 222',
+  email_hint:'pri•••'
+ });
+ assert.ok(bulkReads>=1);
  const payload=JSON.stringify(response);
- for(const forbidden of ['CUST_ID','private@example.com','+447700900222','Private','customer_id','email_address','phone_number']){
+ for(const forbidden of ['CUST_ID','private@example.com','+447700900222','SECRET NOTE','Customer','customer_id','email_address','phone_number','family_name','given_name']){
   assert.ok(!payload.includes(forbidden),forbidden+' leaked in staff payload');
  }
+});
+test('no CUSTOMERS_READ permission falls back to private anonymous appointments',async()=>{
+ denyCustomerRead=true;
+ try{
+  const response=await staff.appointments(userSession(),day);
+  assert.equal(response.length,1);
+  assert.equal(response[0].customer,null);
+  assert.equal(response[0].service,'Haircut');
+  assert.ok(!JSON.stringify(response).includes('CUST_ID'));
+ }finally{denyCustomerRead=false;}
 });
 test('staff cannot call a booking belonging to another barber',async()=>{
  const req=userSession();
