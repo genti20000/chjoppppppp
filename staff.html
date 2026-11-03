@@ -1,42 +1,101 @@
 <!doctype html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#101112">
-<meta name="robots" content="noindex,nofollow">
-<title>Choppers Staff | Today's Appointments</title>
-<link rel="stylesheet" href="/style.css">
-</head><body>
-<header class="topbar"><a class="brand" href="https://choppersbarbers.co.uk/"><span class="brand-mark" aria-hidden="true">✂</span><span>CHOPPERS <small>PRIVATE STAFF PORTAL</small></span></a><span class="secure"><span class="secure-dot"></span> PRIVATE ACCESS</span></header>
-<main class="site-container staff-container">
- <section class="intro staff-intro"><div class="eyebrow">CHOPPERS · LONDON BRIDGE</div><h1>Staff <em>dashboard.</em></h1><p>Your appointments, with customer details shown only in a limited, masked form.</p></section>
- <section id="login-panel" class="booking-card staff-login-card">
-   <div class="card-heading"><div><span class="step">TEAM SIGN IN</span><h2>Your private account</h2></div><span class="staff-count">STAFF ONLY</span></div>
-   <form id="staff-login" class="staff-form">
+<meta name="theme-color" content="#121110"><meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Private Choppers Barbers staff calendar and appointments.">
+<title>Staff Calendar | Choppers Barbers</title>
+<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/staff-calendar.css">
+</head>
+<body class="staff-calendar-body">
+<header class="topbar sc-topbar">
+ <a class="brand" href="https://choppersbarbers.co.uk/" aria-label="Choppers Barbers home"><span class="brand-mark" aria-hidden="true">✂</span><span>CHOPPERS <small>BARBERS · STAFF CALENDAR</small></span></a>
+ <div class="sc-top-actions"><span class="sc-private"><span class="secure-dot"></span> PRIVATE WORKSPACE</span><button id="logout" class="sc-sign-out" type="button" hidden>Sign out ↗</button></div>
+</header>
+<main class="site-container sc-container">
+ <section id="login-panel" class="sc-login-layout">
+   <div class="sc-login-intro"><span class="sc-eyebrow">THE TEAM WORKSPACE</span><h1>Better days.<br><em>Better bookings.</em></h1><p>A clearer look at the day ahead. Private appointments, secure access and Choppers' own calendar.</p></div>
+   <section class="booking-card sc-login-card" aria-labelledby="staff-login-title">
+    <div class="card-heading"><div><span class="step">PRIVATE STAFF LOGIN</span><h2 id="staff-login-title">Welcome back</h2></div><span class="staff-count">CHOPPERS</span></div>
+    <form id="staff-login" class="staff-form">
      <label class="staff-label" for="username">Username</label>
-     <input class="staff-input" id="username" name="username" required autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="e.g. victor">
+     <input id="username" class="staff-input" required autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="e.g. victor">
      <label class="staff-label" for="staff-password">Password</label>
-     <input class="staff-input" id="staff-password" name="password" type="password" required autocomplete="current-password" placeholder="Your private password">
-     <button id="login-button" class="book-button" type="submit">Sign in <span aria-hidden="true">→</span></button>
-     <p class="staff-status" id="login-status" role="status" aria-live="polite"></p>
-   </form>
-   <div class="staff-disclaimer">Your password is issued by the owner. Staff see customer first name, surname initial, the last three phone digits and first three email characters. Full contact details are not shown.</div>
- </section>
- <section id="staff-panel" hidden>
-   <div class="staff-profilebar"><div><span class="step">WELCOME BACK</span><h2 id="welcome">Your appointments</h2></div><button class="staff-logout" id="logout" type="button">Sign out <span aria-hidden="true">↗</span></button></div>
-   <div class="staff-privacy"><span class="staff-privacy-symbol">🔒</span><div><b>Customer information is protected</b><small>You'll see only the customer's first name, surname initial, phone's last three digits and email's first three characters. Full contact details stay private; calls use our business number.</small></div></div>
-   <section class="booking-card staff-schedule">
-     <div class="card-heading"><div><span class="step">YOUR SCHEDULE</span><h2>Appointments</h2></div><span id="count" class="staff-count">0 BOOKED</span></div>
-     <div class="staff-daybar"><label for="staff-date">Date</label><input id="staff-date" class="staff-input" type="date" required><button id="refresh" class="staff-refresh" type="button" title="Refresh appointments">↻ Refresh</button></div>
-     <p id="schedule-message" class="staff-status" aria-live="polite" role="status"></p>
-     <div id="appointments" class="staff-appointments"></div>
-     <div class="staff-schedule-footer"><span>All times London local</span><span>Updated from Square</span></div>
+     <input id="staff-password" class="staff-input" type="password" required autocomplete="current-password" placeholder="Your private password">
+     <button id="login-button" class="book-button" type="submit">Enter staff calendar <span aria-hidden="true">→</span></button>
+     <p id="login-status" class="staff-status" role="status" aria-live="polite"></p>
+    </form>
+    <p class="staff-disclaimer">Every barber has a private login. Customer identification is only shown, in masked form, after you open an appointment.</p>
    </section>
-   <div class="staff-payments">
-     <div class="staff-pay-icon">▣</div>
-     <div><b>Take payment on Square Register</b><p>Use your staff PIN on the two-screen Register. The customer pays on the second screen; the service price shown here is a reference, and the Register remains the final source for the amount charged.</p></div>
+ </section>
+ <section id="staff-panel" hidden aria-label="Choppers staff calendar">
+   <div class="sc-welcome">
+    <div><span class="sc-eyebrow">STAFF SCHEDULING</span><h1>Good morning, <em id="staff-name">barber.</em></h1><p>Appointments that make sense at a glance.</p></div>
+    <div class="sc-welcome-mark"><span>✂</span><small>CHOPPERS<br>BARBERS</small></div>
    </div>
+   <div class="sc-toolbar" aria-label="Calendar controls">
+    <div class="sc-toolbar-top">
+     <div class="sc-date-control">
+      <button id="previous" class="sc-nav-btn" type="button" aria-label="Previous period">‹</button>
+      <div class="sc-date-display"><span class="sc-date-caption">CALENDAR DATE</span><strong id="date-caption">Today</strong></div>
+      <button id="next" class="sc-nav-btn" type="button" aria-label="Next period">›</button>
+      <label class="sc-date-picker" for="calendar-date" title="Choose a date">▦ <span class="sr-only">Choose date</span></label>
+      <input id="calendar-date" class="sc-native-date" type="date" aria-label="Choose calendar date">
+      <button id="today" class="sc-today-btn" type="button">Today</button>
+     </div>
+     <div class="sc-view-switch" role="group" aria-label="Calendar view">
+      <button class="sc-view-btn is-active" type="button" data-view="day" aria-pressed="true">Day</button>
+      <button class="sc-view-btn" type="button" data-view="week" aria-pressed="false">Week</button>
+      <button class="sc-view-btn" type="button" data-view="month" aria-pressed="false">Month</button>
+     </div>
+    </div>
+    <div class="sc-toolbar-bottom">
+     <label class="sc-filter-control"><span class="sc-filter-label">BARBER</span>
+      <select id="barber-select" aria-label="Filter by barber"><option value="all">All barbers · side by side</option>
+       <option value="liri">Liri</option><option value="marouan">Marouan</option><option value="nick">Nick</option><option value="victor">Victor</option>
+      </select>
+     </label>
+     <div id="zoom-control" class="sc-zoom-control"><span class="sc-filter-label">TIME SCALE</span>
+      <div class="sc-zoom-switch" role="group" aria-label="Calendar time scale">
+       <button type="button" data-zoom="60" aria-pressed="false">60m</button>
+       <button type="button" data-zoom="30" aria-pressed="false">30m</button>
+       <button type="button" data-zoom="15" class="is-active" aria-pressed="true">15m</button>
+      </div>
+     </div>
+     <button id="refresh" type="button" class="sc-refresh"><span aria-hidden="true">↻</span> Refresh</button>
+    </div>
+   </div>
+
+   <div class="sc-summary">
+    <div class="sc-summary-heading">
+     <div><span class="sc-eyebrow" id="range-label">TODAY'S BOOKINGS</span><h2 id="calendar-heading">Your schedule</h2></div>
+     <div class="sc-counter"><strong id="count">0</strong><span>appointments</span></div>
+    </div>
+    <div class="sc-legend" id="staff-legend" aria-label="Barber colours"></div>
+   </div>
+   <p id="view-notice" class="sc-view-notice" role="status" aria-live="polite" hidden></p>
+   <p id="schedule-message" class="sc-load-status" role="status" aria-live="polite" hidden></p>
+   <section id="calendar-shell" class="sc-calendar-shell" aria-label="Appointment calendar">
+    <div id="calendar-viewport" class="sc-calendar-viewport">
+     <div id="calendar" aria-live="off"></div>
+    </div>
+   </section>
+   <div class="sc-bottom-note"><span>✦ Customer details shown only after opening an appointment</span><span>Square appointments · London local time</span></div>
+   <section class="sc-register">
+    <div class="sc-register-icon" aria-hidden="true">▣</div>
+    <div><strong>Taking payment?</strong><p>Continue using your two-screen Square Register. The calendar shows reference prices, not payment confirmation.</p></div>
+   </section>
  </section>
 </main>
-<footer class="site-footer"><span>© CHOPPERS BARBERS · PRIVATE STAFF ACCESS</span><a href="https://choppersbarbers.co.uk/">MAIN WEBSITE ↗</a></footer>
+
+<div id="appointment-overlay" class="sc-overlay" hidden>
+ <div id="appointment-backdrop" class="sc-overlay-backdrop" aria-hidden="true"></div>
+ <section id="appointment-dialog" class="sc-detail-sheet" role="dialog" aria-modal="true" aria-labelledby="detail-title" tabindex="-1">
+  <div class="sc-sheet-handle" aria-hidden="true"></div>
+  <div class="sc-sheet-top"><div><span class="sc-eyebrow">APPOINTMENT DETAILS</span><h2 id="detail-title">Booking</h2></div><button id="detail-close" class="sc-detail-close" type="button" aria-label="Close appointment details">×</button></div>
+  <div id="detail-content" class="sc-detail-content"></div>
+ </section>
+</div>
+<footer class="site-footer sc-footer"><span>© CHOPPERS BARBERS · STAFF ACCESS</span><a href="https://choppersbarbers.co.uk/">MAIN WEBSITE ↗</a></footer>
 <script src="/staff.js" defer></script>
 </body></html>
