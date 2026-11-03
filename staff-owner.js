@@ -51,17 +51,27 @@ function row(u){
 }
 async function loadSetup(){
  const statuses=[
-  ['staff_database_configured','setup-database'],
-  ['square_credentials_configured','setup-square'],
-  ['masked_calls_configured','setup-calls']
+  ['staff_database_configured','staff_database_verified','setup-database'],
+  ['square_credentials_configured','square_staff_profiles_verified','setup-square'],
+  ['masked_calls_configured',null,'setup-calls']
  ];
  try{
   const r=await api('/api/staff/setup');
-  for(const [key,id] of statuses){
+  for(const [configKey,verifyKey,id] of statuses){
    const e=document.getElementById(id);
-   const configured=!!r[key];
-   e.textContent=configured?'Configured · not yet tested':'Not connected';
-   e.className=configured?'owner-connected':'owner-not-connected';
+   const configured=!!r[configKey];
+   const verified=verifyKey?!!r[verifyKey]:false;
+   e.textContent=!configured?'Not connected':verified?'Verified':verifyKey?'Credentials saved · check failed':'Credentials not connected';
+   if(configured&&!verified&&verifyKey){
+     e.textContent=id==='setup-square'?'Profile check incomplete':'Staff table not verified';
+   }
+   e.className=verified?'owner-connected':'owner-not-connected';
+  }
+  const detail=document.getElementById('setup-details');
+  if(detail){
+    const notes=[r.database_detail,r.square_detail].filter(Boolean);
+    if(r.square_matched_staff?.length&&!r.square_staff_profiles_verified)notes.push('Matched Square staff: '+r.square_matched_staff.join(', '));
+    detail.textContent=notes.join(' ')||'These checks do not confirm bookings or masked calls. Twilio is not yet connected.';
   }
  }catch(e){
   for(const [,id] of statuses){
