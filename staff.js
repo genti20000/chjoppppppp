@@ -229,11 +229,6 @@ function render(){
  updateControls();
  const total=state.events.length;
  $('count').textContent=String(total);
- if(!total){
-  $('calendar').replaceChildren(el('div','sc-empty','No appointments found for this period. Change the date or barber to see more.'));
-  $('calendar-viewport').scrollTop=0;
-  return;
- }
  if(state.view==='month'){renderMonth();return;}
  if(state.view==='week'){
   const {start}=getPeriod();
@@ -345,6 +340,8 @@ function loggedIn(user){
  state.barber=window.matchMedia('(min-width:760px)').matches?'all':user.barber_id;
  state.date=todayLondon();
  $('staff-name').textContent=user.display_name||NAME[user.barber_id]||'team';
+ const londonHour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',hour:'numeric',hourCycle:'h23'}).format(new Date()));
+ document.querySelector('.sc-welcome h1').firstChild.textContent=londonHour<12?'Good morning, ':londonHour<17?'Good afternoon, ':'Good evening, ';
  $('login-panel').hidden=true;$('staff-panel').hidden=false;$('logout').hidden=false;
  load();
 }
@@ -373,7 +370,13 @@ $('previous').addEventListener('click',()=>shiftPeriod(-1));
 $('next').addEventListener('click',()=>shiftPeriod(1));
 $('today').addEventListener('click',()=>{state.date=todayLondon();note('');load();});
 $('calendar-date').addEventListener('change',e=>{if(/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)){state.date=e.target.value;note('');load();}});
-$('.sc-date-picker'); // no-op placeholder for old browsers using native label focus
+document.querySelector('.sc-date-picker').addEventListener('click',e=>{
+ e.preventDefault();
+ const input=$('calendar-date');
+ if(typeof input.showPicker==='function'){
+  try{input.showPicker();}catch{input.focus();input.click();}
+ }else{input.focus();input.click();}
+});
 for(const b of document.querySelectorAll('[data-view]'))b.addEventListener('click',()=>setView(b.dataset.view));
 $('barber-select').addEventListener('change',e=>setBarber(e.target.value));
 for(const b of document.querySelectorAll('[data-zoom]'))b.addEventListener('click',()=>{
