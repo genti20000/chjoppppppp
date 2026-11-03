@@ -14,12 +14,12 @@ Built 2 November 2026. Repository: https://github.com/genti20000/chjoppppppp
 
 ## Activation requirements (the app is not live until these are configured)
 
-**Do not reuse an AMICA or London Karaoke Club database.** Create a dedicated **Choppers** Supabase project in the London/UK region if possible.
+**Choppers database selection: Malandra** (`kzdkvaoxadpvqezbusax`). This is the owner-specified separate Supabase project. Do not use the connected `gent's projects` database for Choppers. Access to Malandra through this chat's Supabase connector is currently unavailable; it may be connected separately through Codex MCP.
 
-1. Create/use a dedicated Choppers Supabase project. Run **staff-schema.sql** in SQL Editor. If using it to save public barber order as well, also run **schema.sql**.
+1. In the owner-specified Malandra Supabase project (`kzdkvaoxadpvqezbusax`), run **staff-schema.sql** in SQL Editor. If using it to save public barber order as well, also run **schema.sql**. Do not run either SQL script in `gent's projects`.
 2. In Vercel project **chjoppppppp** -> Settings -> Environment Variables add:
-   - SUPABASE_URL = https://YOUR-CHOPPERS-PROJECT.supabase.co
-   - SUPABASE_SERVICE_ROLE_KEY = the project's private service-role key (never put this in client JS or GitHub).
+   - SUPABASE_URL = https://kzdkvaoxadpvqezbusax.supabase.co (already set in Choppers Vercel production).
+   - SUPABASE_SERVICE_ROLE_KEY = the **Malandra** project's private service-role key (not connected yet; never put this in client JS, GitHub or chat).
    - SESSION_SECRET = already configured for the admin project. Keep private.
    - ADMIN_PASSWORD = already configured for the owner admin.
 3. For appointment read-only integration, add:
