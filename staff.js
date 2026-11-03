@@ -320,7 +320,7 @@ async function openDetail(booking){
  if(detailController)detailController.abort();
  detailController=new AbortController();
  try{
-  const details=await api('/api/staff/appointment?id='+encodeURIComponent(booking.id),{signal:detailController.signal});
+  const details=await api('/api/staff/calendar?id='+encodeURIComponent(booking.id),{signal:detailController.signal});
   if(!$('appointment-overlay').hidden)detailContent(details);
  }catch(e){
   if(e.name!=='AbortError'&&!$('appointment-overlay').hidden){
