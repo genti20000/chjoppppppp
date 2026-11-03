@@ -9,7 +9,7 @@ process.env.SQUARE_ACCESS_TOKEN='not-a-real-square-token';
 process.env.SQUARE_LOCATION_ID='LDBX5380WHX98';
 process.env.TWILIO_ACCOUNT_SID='AC'+'a'.repeat(32);
 process.env.TWILIO_AUTH_TOKEN='dummy-twilio-secret';
-process.env.TWILIO_PHONE_NUMBER='+442070000000';
+process.env.TWILIO_CALLER_ID='+442070000000';
 let nonce='nonce-for-test-session';
 const USER={id:'11111111-1111-4111-8111-111111111111',barber_id:'victor',
  display_name:'Victor',username:'victor',password_hash:'unused',phone_e164:'+447700900111',active:true};
