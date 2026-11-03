@@ -25,7 +25,7 @@
      <button id="login-button" class="book-button" type="submit">Enter staff calendar <span aria-hidden="true">→</span></button>
      <p id="login-status" class="staff-status" role="status" aria-live="polite"></p>
     </form>
-    <p class="staff-disclaimer">Every barber has a private login. Customer identification is only shown, in masked form, after you open an appointment.</p>
+    <p class="staff-disclaimer">Every barber has a private login. Appointment blocks show only first name and surname initial. Phone and email hints appear only after opening an appointment.</p>
    </section>
  </section>
  <section id="staff-panel" hidden aria-label="Choppers staff calendar">
@@ -48,10 +48,19 @@
       <button class="sc-view-btn" type="button" data-view="week" aria-pressed="false">Week</button>
       <button class="sc-view-btn" type="button" data-view="month" aria-pressed="false">Month</button>
      </div>
+     <button id="sc-options-toggle" class="sc-options-toggle" type="button" aria-expanded="false" aria-controls="sc-settings" aria-label="Show calendar options"><span aria-hidden="true">⚙</span> Options <span aria-hidden="true" class="sc-options-chevron">⌄</span></button>
     </div>
-    <div class="sc-toolbar-bottom">
-     <label class="sc-filter-control"><span class="sc-filter-label">BARBER</span>
-      <select id="barber-select" aria-label="Filter by barber"><option value="all">All barbers · side by side</option>
+    <div id="sc-settings" class="sc-toolbar-bottom">
+     <div id="sc-all-barbers-control" class="sc-all-barbers-control">
+      <span class="sc-filter-label">DAY VIEW</span>
+      <label class="sc-switch-label" for="all-barbers">
+       <span class="sc-switch-text">All barbers</span>
+       <input id="all-barbers" type="checkbox" class="sc-switch-input">
+       <span class="sc-switch-track" aria-hidden="true"></span>
+      </label>
+     </div>
+     <label id="sc-single-barber-filter" class="sc-filter-control"><span class="sc-filter-label">SELECT BARBER</span>
+      <select id="barber-select" aria-label="Filter by individual barber">
        <option value="liri">Liri</option><option value="marouan">Marouan</option><option value="nick">Nick</option><option value="victor">Victor</option>
       </select>
      </label>
@@ -62,6 +71,7 @@
        <button type="button" data-zoom="15" class="is-active" aria-pressed="true">15m</button>
       </div>
      </div>
+     <button id="fit-day" type="button" class="sc-fit-day" aria-pressed="false"><span aria-hidden="true">⤢</span> Fit day</button>
      <button id="refresh" type="button" class="sc-refresh"><span aria-hidden="true">↻</span> Refresh</button>
     </div>
    </div>
@@ -80,7 +90,7 @@
      <div id="calendar" aria-live="off"></div>
     </div>
    </section>
-   <div class="sc-bottom-note"><span>✦ Customer details shown only after opening an appointment</span><span>Square appointments · London local time</span><span>Staff breaks and time off may not appear here. Check Square before treating gaps as available.</span></div>
+   <div class="sc-bottom-note"><span>✦ First name + surname initial on calendar; phone/email hints only in details</span><span>Square appointments · London local time</span><span>Staff breaks and time off may not appear here. Check Square before treating gaps as available.</span></div>
    <section class="sc-register">
     <div class="sc-register-icon" aria-hidden="true">▣</div>
     <div><strong>Taking payment?</strong><p>Continue using your two-screen Square Register. The calendar shows reference prices, not payment confirmation.</p></div>
