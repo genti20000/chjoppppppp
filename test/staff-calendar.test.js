@@ -20,7 +20,7 @@ const B1={id:'B1',location_id:location,start_at:START,status:'ACCEPTED',customer
 const B2={id:'B2',location_id:location,start_at:START,status:'ACCEPTED',customer_id:'C2',
  appointment_segments:[{team_member_id:'TM_LIRI',service_variation_id:'V1',duration_minutes:45}]};
 const actor={barber_id:'victor',display_name:'Victor',id:'admin-test'};
-let profileReads=0,customerReads=0;
+let profileReads=0,customerReads=0,bulkReads=0,denyBulk=false;
 function j(data){return {ok:true,status:200,json:async()=>data,text:async()=>JSON.stringify(data)};}
 global.fetch=async(url,opt={})=>{
  const u=String(url);
@@ -38,6 +38,15 @@ global.fetch=async(url,opt={})=>{
  if(u.includes('/v2/catalog/batch-retrieve'))return j({objects:[
   {id:'V1',type:'ITEM_VARIATION',item_variation_data:{item_id:'I1',name:'Short',price_money:{amount:2400,currency:'GBP'}}},
   {id:'I1',type:'ITEM',item_data:{name:'Men Haircut'}}]});
+ if(u.includes('/v2/customers/bulk-retrieve')){
+  bulkReads++;
+  const ids=JSON.parse(opt.body).customer_ids;
+  if(denyBulk)return {ok:false,status:403,json:async()=>({errors:[]})};
+  return j({responses:Object.fromEntries(ids.map(id=>[id,{customer:{
+   given_name:'James',family_name:'Smith',phone_number:'+447700900123',
+   email_address:'james.smith@example.com',note:'PRIVATE MEDICAL INFORMATION'
+  }}]))});
+ }
  if(u.includes('/v2/customers/C1')||u.includes('/v2/customers/C2')){
   customerReads++;
   return j({customer:{given_name:'James',family_name:'Smith',phone_number:'+447700900123',
@@ -45,15 +54,26 @@ global.fetch=async(url,opt={})=>{
  }
  throw Error('Unhandled Square mock: '+u);
 };
-test('all-barbers day lists all four lanes but no customer data or names',async()=>{
+test('all-barbers day reveals only first name + surname initial, never contact hints',async()=>{
  const r=await c.calendar(actor,today,today,'all');
  assert.deepEqual(r.events.map(x=>x.barber).sort(),['liri','victor']);
  assert.equal(r.barbers.length,4);
- assert.equal(customerReads,0,'Calendar must not fetch personal data');
+ assert.equal(customerReads,0,'Calendar must not fetch full individual profiles');
+ assert.ok(bulkReads>0,'Calendar should fetch masked name initials in bulk');
+ assert.deepEqual(r.events.map(x=>x.customer_name),['James S.','James S.']);
  const serialized=JSON.stringify(r);
- for(const secret of ['James','Smith','123','james.smith','customer_id','given_name','customer','PRIVATE MEDICAL','C1','C2']){
-  assert.ok(!serialized.includes(secret),'Private data leaked into calendar: '+secret);
+ for(const secret of ['Smith','123','james.smith','customer_id','given_name','phone_hint','email_hint','PRIVATE MEDICAL','C1','C2']){
+  assert.ok(!serialized.includes(secret),'Full contact information leaked into calendar: '+secret);
  }
+});
+test('missing Square customer permission gracefully hides names without exposing contact',async()=>{
+ denyBulk=true;
+ try{
+  const r=await c.calendar(actor,today,today,'all');
+  assert.equal(r.events.length,2);
+  assert.ok(r.events.every(e=>e.customer_name===null));
+  assert.ok(!JSON.stringify(r).includes('email_address'));
+ }finally{denyBulk=false;}
 });
 test('single barber Week contains no bookings for other barbers',async()=>{
  const start=c.dayPlus(today,-((new Date(today+'T12:00:00Z').getUTCDay()+6)%7));
