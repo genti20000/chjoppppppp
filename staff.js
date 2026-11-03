@@ -48,8 +48,23 @@ function appointmentCard(b){
  const price=Number.isFinite(b.estimated_price_pence)?' · £'+(b.estimated_price_pence/100).toFixed(2):'';
  desc.append(el('strong','',b.service||'Appointment'),el('span','',(b.duration_minutes||0)+' min'+price+' · '+(b.status||'Booked')));
  head.append(time,desc,el('span','staff-appt-tag','BOOKED'));
+
+ // Server-generated hints only. There are no full phone numbers or email addresses
+ // in the API response, HTML, dataset attributes or links.
+ const customer=el('div','staff-customer');
+ customer.append(el('span','staff-customer-label','CUSTOMER'),
+                 el('strong','staff-customer-name',b.customer?.name||'Name unavailable'));
+ const hints=el('div','staff-customer-hints');
+ const phoneHint=el('span','staff-customer-hint');
+ phoneHint.append(el('span','staff-hint-icon','☎'),el('span','',b.customer?.phone_hint||'Phone unavailable'));
+ phoneHint.setAttribute('aria-label','Phone number ending '+(b.customer?.phone_hint?.slice(-3)||'unavailable'));
+ const emailHint=el('span','staff-customer-hint');
+ emailHint.append(el('span','staff-hint-icon','✉'),el('span','',b.customer?.email_hint||'Email unavailable'));
+ emailHint.setAttribute('aria-label','Email beginning '+(b.customer?.email_hint?.slice(0,3)||'unavailable'));
+ hints.append(phoneHint,emailHint);
+ customer.append(hints);
  const privacy=el('div','staff-appt-privacy');
- privacy.append(el('span','staff-lock-symbol','◈'),el('span','',"Customer's phone and email are hidden."));
+ privacy.append(el('span','staff-lock-symbol','◈'),el('span','',"Only limited customer identifiers are shown. Full contact details remain private."));
  const tools=el('div','staff-appt-tools');
  if(connected){
   const call=el('button','staff-call','☎  Call customer');
@@ -70,7 +85,7 @@ function appointmentCard(b){
  }else{
   tools.append(el('p','staff-setup-note','Masked calling will become available once the owner connects Twilio.'));
  }
- card.append(head,privacy,tools);
+ card.append(head,customer,privacy,tools);
  return card;
 }
 async function load(){
