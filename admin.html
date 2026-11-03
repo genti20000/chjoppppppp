@@ -13,10 +13,18 @@
 <div id="editor-panel" hidden>
  <div class="card-heading"><div><span class="step">DRAG OR USE ARROWS</span><h2>Arrange your team</h2></div><button class="text-action" id="logout">Log out</button></div>
  <p class="admin-help">Reorder using the ↑ ↓ buttons (also works on phones). Drag a row with your mouse on desktop. The published Square links are already loaded. You can replace a link below if it changes. Your saved order controls only this custom page, not the staff order inside Square.</p>
- <div id="storage-warning" class="warning" hidden>Live saving is not configured. Add the Supabase environment variables and run the SQL setup in SETUP.md.</div>
+ <div id="storage-warning" class="warning" hidden>
+ <strong id="storage-warning-title">Barber order database needs setup</strong>
+ <p id="storage-warning-text">The staff database can be connected while the separate barber-order table is missing. The barber list below is a preview until saving is available.</p>
+ <div class="admin-setup-links">
+  <a href="https://github.com/genti20000/chjoppppppp/blob/main/schema.sql" target="_blank" rel="noopener noreferrer">1. Copy barber-order SQL ↗</a>
+  <a href="https://supabase.com/dashboard/project/kzdkvaoxadpvqezbusax/sql/new" target="_blank" rel="noopener noreferrer">2. Open Malandra SQL Editor ↗</a>
+  <button type="button" id="storage-retry" class="owner-small-button">↻ Retry connection</button>
+ </div>
+</div>
  <div class="admin-any"><span class="any-icon">♧</span><b>Any Barber</b><span class="fixed">ALWAYS FIRST</span></div>
  <div id="editor-list"></div>
- <div class="actions"><button id="save" class="book-button">Save changes <span>✓</span></button></div>
+ <div class="actions"><button id="save" class="book-button">Save changes <span>✓</span></button></div><p class="admin-save-note" id="save-note" hidden>Saving is disabled until the barber-order database table is available. Changes shown above are not published.</p>
 </div>
 <div class="actions"><a class="book-button" href="/staff/owner">Manage Staff Logins &amp; Masked Calling <span>→</span></a></div>
 <div id="message" role="status" aria-live="polite" class="message"></div>
