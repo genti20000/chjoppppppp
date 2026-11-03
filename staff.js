@@ -1,8 +1,8 @@
 (function(){
 'use strict';
-// Mobile-first Choppers calendar. No customer hints in list data; detail API on click only.
+// Choppers responsive calendar: blocks expose name + initial only; phone and email remain click-only.
 const $=id=>document.getElementById(id);
-const state={staff:null,view:'day',barber:null,date:todayLondon(),zoom:15,events:[],callsConnected:false,sequence:0};
+const state={staff:null,view:'day',barber:null,singleBarber:null,date:todayLondon(),zoom:15,fitDay:false,events:[],callsConnected:false,sequence:0};
 const NAME={liri:'Liri',marouan:'Marouan',nick:'Nick',victor:'Victor'};
 const ALL=['liri','marouan','nick','victor'];
 const DAY=86400000;
@@ -63,7 +63,13 @@ function updateControls(){
   :longDate(state.date,{month:'long',year:'numeric'});
  $('date-caption').textContent=stamp;
  $('calendar-date').value=state.date;
- $('barber-select').value=state.barber;
+ $('barber-select').value=state.singleBarber||state.staff?.barber_id||'liri';
+ $('all-barbers').checked=state.view==='day'&&state.barber==='all';
+ $('sc-all-barbers-control').hidden=state.view!=='day';
+ $('sc-single-barber-filter').hidden=state.view==='day'&&state.barber==='all';
+ $('fit-day').hidden=state.view!=='day';
+ $('fit-day').classList.toggle('is-active',state.fitDay&&state.view==='day');
+ $('fit-day').setAttribute('aria-pressed',String(state.fitDay&&state.view==='day'));
  for(const b of document.querySelectorAll('[data-view]')){
   const yes=b.dataset.view===state.view;
   b.classList.toggle('is-active',yes);b.setAttribute('aria-pressed',String(yes));
@@ -72,8 +78,6 @@ function updateControls(){
   const yes=Number(b.dataset.zoom)===state.zoom;
   b.classList.toggle('is-active',yes);b.setAttribute('aria-pressed',String(yes));
  }
- const all=$('barber-select').querySelector('option[value="all"]');
- all.disabled=state.view!=='day';
  $('zoom-control').hidden=state.view==='month';
  $('range-label').textContent=state.view==='day'?'DAY SCHEDULE':state.view==='week'?'WEEKLY PLANNER':'MONTHLY OVERVIEW';
  $('calendar-heading').textContent=state.barber==='all'?'All barbers · side by side':NAME[state.barber]+' · '+(state.view==='day'?'Day':state.view==='week'?'Week':'Month');
@@ -87,7 +91,7 @@ function setView(view){
  if(!['day','week','month'].includes(view))return;
  state.view=view;
  if(view!=='day'&&state.barber==='all'){
-  state.barber=state.staff.barber_id;
+  state.barber=state.singleBarber||state.staff.barber_id;
   note('Week and Month are individual-barber views. Switched to '+NAME[state.barber]+'.');
  }else note('');
  load();
@@ -96,6 +100,7 @@ function setBarber(id){
  if(id!=='all'&&!ALL.includes(id))return;
  if(id==='all'&&state.view!=='day'){state.view='day';note('All barbers can be viewed side by side in Day view.');}
  else note('');
+ if(id!=='all')state.singleBarber=id;
  state.barber=id;load();
 }
 function shiftPeriod(direction){
@@ -110,17 +115,26 @@ function shiftPeriod(direction){
  }
  note('');load();
 }
-function appointmentButton(booking,min,scale,startMin){
+function appointmentButton(booking,scale,startMin){
  const top=Math.max(0,(londonClock(booking.start_at).min-startMin)*scale);
- const height=Math.max(19,booking.duration_minutes*scale-2);
+ // Fit Day may shrink 15-minute bookings; do not enlarge them over adjacent slots.
+ const height=Math.max(10,booking.duration_minutes*scale-2);
  const card=el('button','sc-event sc-'+booking.barber);
  card.type='button';card.style.top=top+'px';card.style.height=height+'px';
- if(height<43)card.classList.add('sc-compact');
- card.setAttribute('aria-label','Open '+booking.service+' appointment at '+londonClock(booking.start_at).text+' with '+NAME[booking.barber]);
- const clock=el('span','sc-event-time',londonClock(booking.start_at).text);
- const title=el('strong','sc-event-title',booking.service||'Appointment');
- card.append(clock,title);
- if(height>=75)card.append(el('span','sc-event-status',booking.duration_minutes+' min'));
+ const time=londonClock(booking.start_at).text;
+ const customer=booking.customer_name||'Name unavailable';
+ card.setAttribute('aria-label',time+' '+(booking.service||'Appointment')+' for '+customer+'. Open masked appointment details.');
+ card.title=time+' · '+(booking.service||'Appointment')+' · '+customer;
+ if(height>=33){
+  const heading=el('span','sc-event-primary');
+  heading.append(el('strong','sc-event-inline-time',time+' ·'),el('span','sc-event-inline-service',booking.service||'Appointment'));
+  card.append(heading,el('strong','sc-event-customer',customer));
+  if(height>=80)card.append(el('span','sc-event-status',booking.duration_minutes+' min'));
+ }else{
+  card.classList.add(height<17?'sc-micro':'sc-compact');
+  const line=height<17?time+' '+customer:time+' · '+customer;
+  card.append(el('span','sc-event-single-line',line));
+ }
  card.addEventListener('click',()=>openDetail(booking));
  return card;
 }
@@ -133,17 +147,33 @@ function renderTimeline(lanes){
  const outer=$('calendar');
  outer.replaceChildren();
  const records=state.events;
- const tick=state.zoom,unit=tick===15?29:tick===30?20:13;
- const scale=unit/15;
+ const tick=state.zoom;
  const {from,to}=visibleHours(records);
+ const viewport=$('calendar-viewport');
+ const fit=state.fitDay&&state.view==='day';
+ viewport.classList.toggle('is-fit-day',fit);
+ let scale;
+ if(fit){
+  // Reserve a sticky 54px lane header and fit every working hour into the viewport.
+  // On very short screens, avoid making an individual 15m slot less than 10px high.
+  const mobile=window.matchMedia('(max-width:640px)').matches;
+  const viewportHeight=Math.max(mobile?290:350,Math.min(mobile?760:950,Math.round(window.innerHeight*(mobile?.63:.74))));
+  viewport.style.height=viewportHeight+'px';
+  scale=Math.max(.64,(viewportHeight-60)/(to-from));
+ }else{
+  viewport.style.height='';
+  scale=(tick===15?29:tick===30?20:13)/15;
+ }
+ const unit=tick*scale;
  const height=(to-from)*scale;
  const frame=el('div','sc-timeline');
  frame.style.setProperty('--sc-cols',String(lanes.length));
  frame.style.setProperty('--sc-unit',unit+'px');
- frame.style.setProperty('--sc-mincol',state.view==='week'?'188px':'210px');
+ frame.style.setProperty('--sc-mincol',state.view==='week'?'188px':(lanes.length===4?'188px':'210px'));
  frame.style.setProperty('--sc-height',height+'px');
+ frame.classList.toggle('sc-fit-mode',fit);
  const head=el('div','sc-timeline-head');
- head.append(el('span','sc-axis-head','GMT / BST'));
+ head.append(el('span','sc-axis-head','LONDON'));
  for(const lane of lanes){
   const tile=el('div','sc-lane-head sc-'+lane.barber);
   const dot=el('span','sc-lane-indicator');
@@ -161,9 +191,9 @@ function renderTimeline(lanes){
  body.append(axis);
  for(const lane of lanes){
   const cell=el('div','sc-lane sc-'+lane.barber);
-  const matches=state.events.filter(b=>b.barber===lane.barber&&b.start_at&&
+  const matches=records.filter(b=>b.barber===lane.barber&&b.start_at&&
      (state.view==='week'?londonDate(b.start_at)===lane.date:true));
-  for(const entry of matches)cell.append(appointmentButton(entry,0,scale,from));
+  for(const entry of matches)cell.append(appointmentButton(entry,scale,from));
   if(lane.date===todayLondon()){
    const now=londonClock(new Date().toISOString()).min;
    if(now>=from&&now<=to){
@@ -175,8 +205,7 @@ function renderTimeline(lanes){
  }
  frame.append(head,body);
  outer.append(frame);
- const viewport=$('calendar-viewport');
- viewport.scrollTop=Math.max(0,(Math.max(from,540)-from)*scale-38);
+ viewport.scrollTop=fit?0:Math.max(0,(Math.max(from,540)-from)*scale-38);
  viewport.scrollLeft=0;
 }
 function londonDate(time){
@@ -184,6 +213,7 @@ function londonDate(time){
  return p.year+'-'+p.month+'-'+p.day;
 }
 function renderMonth(){
+ const viewport=$('calendar-viewport');viewport.style.height='';viewport.classList.remove('is-fit-day');
  const holder=$('calendar');holder.replaceChildren();
  const period=getPeriod();
  const start=period.start,end=period.end;
@@ -337,7 +367,9 @@ function closeDetail(){
 }
 function loggedIn(user){
  state.staff=user;
+ state.singleBarber=user.barber_id;
  state.barber=window.matchMedia('(min-width:760px)').matches?'all':user.barber_id;
+ state.fitDay=window.matchMedia('(min-width:760px)').matches;
  state.date=todayLondon();
  $('staff-name').textContent=user.display_name||NAME[user.barber_id]||'team';
  const londonHour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',hour:'numeric',hourCycle:'h23'}).format(new Date()));
@@ -380,8 +412,26 @@ document.querySelector('.sc-date-picker').addEventListener('click',e=>{
 for(const b of document.querySelectorAll('[data-view]'))b.addEventListener('click',()=>setView(b.dataset.view));
 $('barber-select').addEventListener('change',e=>setBarber(e.target.value));
 for(const b of document.querySelectorAll('[data-zoom]'))b.addEventListener('click',()=>{
- state.zoom=Number(b.dataset.zoom);updateControls();
- if(state.events.length&&state.view!=='month')render(); // zoom never fetches PII or refetches the calendar.
+ state.zoom=Number(b.dataset.zoom);
+ state.fitDay=false;updateControls();
+ if(state.view!=='month')render(); // Zoom never refetches the calendar.
+});
+$('fit-day').addEventListener('click',()=>{
+ if(state.view!=='day')return;
+ state.fitDay=!state.fitDay;
+ updateControls();render(); // Fit is purely client-side: no extra customer lookup.
+});
+$('all-barbers').addEventListener('change',event=>{
+ if(state.view!=='day')return;
+ setBarber(event.target.checked?'all':(state.singleBarber||state.staff.barber_id));
+});
+function toggleOptions(open){
+ $('sc-settings').classList.toggle('is-open',open);
+ $('sc-options-toggle').setAttribute('aria-expanded',String(open));
+ $('sc-options-toggle').setAttribute('aria-label',open?'Hide calendar options':'Show calendar options');
+}
+$('sc-options-toggle').addEventListener('click',()=>{
+ toggleOptions(!$('sc-settings').classList.contains('is-open'));
 });
 $('refresh').addEventListener('click',load);
 $('detail-close').addEventListener('click',closeDetail);
