@@ -4,7 +4,7 @@ Built 2 November 2026. Repository: https://github.com/genti20000/chjoppppppp
 
 ## What is included
 
-- **/staff**: mobile-first staff-only login and schedule. Each barber sees only bookings in their own Square calendar. Each appointment shows time, duration, service and reference price, plus **first name + surname initial**, **last three digits of the phone**, and **first three characters of the email's local part**. Square's full phone/email, customer ID, full surname and notes are not returned.
+- **/staff**: responsive interactive Day/Week/Month calendar. **Day view** can show all four barbers side by side for signed-in staff, or an individual barber. **Week and Month** remain single-barber views. Day/Week timelines zoom to **15 / 30 / 60-minute ticks**. Month shows daily counts and service snippets. The calendar API carries booking times, service, barber and reference price only. **Customer identifiers are absent until an authenticated user clicks an appointment**, where a separate details API returns first name + surname initial, phone last three digits, and email local part first three characters. Full phone/email, customer ID, full surname and notes never reach the staff browser.
 - **Call Customer**: server checks the authenticated barber owns the booking, fetches the customer number privately from Square, then uses Twilio to ring the barber's registered phone and bridge the customer. Both legs use a Choppers business caller ID. No customer number appears in the browser, HTML, links or server response. No recording by default.
 - **Square Register**: staff use their own restricted Square Register PIN to charge cards on the existing dual-screen hardware. This app does NOT charge customers or mark transactions paid. Staff see reference service prices only.
 - **/staff/owner**: owner-only staff provisioning, protected by the existing /admin owner login. Create each barber's account, register callback number, disable access, rotate passwords. Passwords are generated once and stored salted using scrypt.
@@ -62,7 +62,7 @@ Owner should create a restricted Square permission set for each barber's Registe
 
 - Keep all Square, Supabase and Twilio tokens as encrypted server-side Vercel environment variables.
 - Use separate barbers' individual accounts; share neither the owner password nor the Square API tokens with staff.
-- Square full customer records stay on the server; browser receives only the assigned appointment's first name, surname initial, masked phone suffix and masked email prefix, plus the booking time, service, duration, reference price, booking ID and status. The browser has no phone/email links or raw profile fields.
+- Calendar API responses contain no customer names, phone numbers, emails, masked hints, customer IDs or notes. An authenticated staff member can **open** any Choppers appointment in the Day side-by-side view and receive only masked customer hints through a separate endpoint. A barber can initiate a masked call **only for bookings assigned to that barber**. Other staff never receive full PII. The browser has no phone/email links or raw profile fields.
 - Twilio presents the company number on both call legs. A customer who independently tells a barber their number, or a barber who can access customer details through Square Register/other systems, is outside this app's control.
 - Calls are not recorded by this application. Check Twilio and carrier-level settings separately.
 - Store minimal call audit records without customer numbers or emails. Review retention and UK GDPR requirements and add a written staff privacy policy.
@@ -91,3 +91,17 @@ The source files are committed and Vercel builds are automatic. This is a **secu
 ## Staff customer recognition (3 November 2026)
 
 Customer hints are generated **server-side** from Square's `BulkRetrieveCustomers` API (up to 100 customers per selected date), after filtering bookings to the signed-in barber. Each appointment displays a first name and surname initial (e.g. **James S.**), phone last three digits (**••• 123**) and email local part first three characters (**jam•••**, with the entire domain hidden). No full email, full phone, Square customer ID or private customer note is serialized into the staff response. If customer records or the `CUSTOMERS_READ` permission are missing, identifiers safely fall back to **unavailable**, without breaking the appointment schedule. The owner must still restrict employee access to Square Customer Directory and Square Register customer views separately.
+
+## Choppers responsive scheduling update (3 November 2026)
+
+- Mobile: Day defaults to the logged-in barber; choose **All barbers** to swipe between horizontally scrollable barber lanes. Calendar date picker, previous/next navigation, Today, refresh, and a responsive bottom-sheet appointment detail.
+- iPad/desktop: Day defaults to **All barbers, side by side**, with a sticky time ruler and distinct barber colours. Detail opens as a right-hand slide-over.
+- **Zoom 15m, 30m, 60m** changes the time grid and appointment height instantly, with no extra Square API call.
+- Week: choose one barber and scroll through seven daily columns; tap an appointment for details.
+- Month: choose one barber, view a compact 7-column overview and select a day to drill into Day.
+- Staff can view other barbers' booking times and services in the side-by-side calendar. **No customer identifiers or customer lookup occurs when listing a calendar**. An explicit appointment click triggers the one-time masked-details lookup. Only the assigned barber can initiate a masked call.
+- Square Bookings API supplies appointment entries, but unavailability, staff breaks and time-off blocks shown in Square Calendar are **not assumed to be included**. No synthetic unavailable periods are created.
+- APIs: `GET /api/staff/calendar?start=YYYY-MM-DD&end=YYYY-MM-DD&barber=all|liri|marouan|nick|victor` and `GET /api/staff/appointment?id=BOOKING_ID`. Both require staff login. The old `/api/staff/appointments` endpoint has been revised to return only anonymous calendar summaries, preventing masked details from being fetched before a click.
+- `test/staff-calendar.test.js` checks the anonymous listings, server-enforced Day-only all-barber restriction, single-barber date scopes, and masked data on detail, including call permissions. All customer identifiers are masked before serialization.
+
+**Release test:** Sign in with a real barber account on an iPad and mobile, compare with Square bookings, then open an appointment and inspect the Network tab. No masked details should appear in the initial calendar endpoint; only the individual appointment endpoint may return the permitted hints. Confirm Square staff access restrictions separately.
