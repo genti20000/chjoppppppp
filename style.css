@@ -217,3 +217,13 @@
  .staff-privacy{padding:15px 14px}
  .owner-staff-row{padding:18px 15px}
 }
+
+/* Owner activation status: server reports configuration, not live connectivity. */
+.owner-setup-check{margin-bottom:20px}
+.owner-status-list{display:flex;flex-direction:column;padding:9px 22px}
+.owner-status-row{display:flex;justify-content:space-between;gap:16px;align-items:center;min-height:55px;border-bottom:1px solid var(--line);font-size:13px}
+.owner-status-row:last-child{border-bottom:0}
+.owner-status-row strong{font-size:11px;text-align:right}
+.owner-connected{color:#a8dabc}
+.owner-not-connected{color:#e4c38e}
+.owner-setup-check a{color:var(--gold);text-decoration:underline}
