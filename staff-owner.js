@@ -49,6 +49,28 @@ function row(u){
  const tools=el('div','owner-staff-buttons');tools.append(save,rotate,enable);
  section.append(header,phone,number,tools);return section;
 }
+async function loadSetup(){
+ const statuses=[
+  ['staff_database_configured','setup-database'],
+  ['square_credentials_configured','setup-square'],
+  ['masked_calls_configured','setup-calls']
+ ];
+ try{
+  const r=await api('/api/staff/setup');
+  for(const [key,id] of statuses){
+   const e=document.getElementById(id);
+   const configured=!!r[key];
+   e.textContent=configured?'Configured · not yet tested':'Not connected';
+   e.className=configured?'owner-connected':'owner-not-connected';
+  }
+ }catch(e){
+  for(const [,id] of statuses){
+   const target=document.getElementById(id);
+   target.textContent='Unable to check';
+   target.className='owner-not-connected';
+  }
+ }
+}
 async function load(){
  try{
   const r=await api('/api/staff/owner');
@@ -74,6 +96,6 @@ form.addEventListener('submit',async e=>{
 document.getElementById('copy-password').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(pass.textContent);msg.textContent='Password copied.';}catch{msg.textContent='Select and copy the password manually.';}});
 api('/api/auth').then(r=>{
  if(!r.authenticated){locked.hidden=false;return;}
- content.hidden=false;load();
+ content.hidden=false;loadSetup();load();
 }).catch(()=>{locked.hidden=false;});
 })();
