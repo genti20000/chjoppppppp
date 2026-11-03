@@ -184,3 +184,68 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid #eac
  .sc-month-day{min-height:64px}
  .sc-month-count{font-size:8px}
 }
+
+
+/* Calendar v4: smart two-line cards, Fit Day, and hidden-on-mobile settings. */
+.staff-calendar-body [hidden]{display:none!important}
+.sc-options-toggle{display:none}
+.sc-all-barbers-control{display:grid;gap:5px;min-width:150px}
+.sc-switch-label{display:flex;align-items:center;justify-content:space-between;gap:13px;cursor:pointer;min-height:43px;padding:6px 11px;border:1px solid #625547;border-radius:10px;background:#252622}
+.sc-switch-text{font-weight:800;font-size:12px;color:#e6e0d3;white-space:nowrap}
+.sc-switch-input{position:absolute;width:1px;height:1px;opacity:0}
+.sc-switch-track{position:relative;display:inline-block;width:39px;height:23px;flex:none;border:1px solid #756b5a;border-radius:20px;background:#514b43;transition:background .17s}
+.sc-switch-track:after{content:'';position:absolute;top:3px;left:3px;width:15px;height:15px;border-radius:50%;background:#d9d2c4;transition:transform .17s}
+.sc-switch-input:checked+.sc-switch-track{background:#d2a96d;border-color:#e9c68f}
+.sc-switch-input:checked+.sc-switch-track:after{transform:translateX(16px);background:#161513}
+.sc-switch-input:focus-visible+.sc-switch-track{outline:3px solid #fff;outline-offset:3px}
+.sc-fit-day{align-self:flex-end;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #7d6442;border-radius:10px;background:#302d25;color:#e9c594;font-weight:850;padding:11px 15px;min-height:43px;font-size:12px;white-space:nowrap}
+.sc-fit-day:hover{background:#49402e}
+.sc-fit-day.is-active{background:#eac48e;color:#171511;border-color:#eac48e}
+.sc-fit-day>span{font-size:20px;line-height:12px}
+.sc-timeline .sc-event{gap:3px;padding:5px 7px;min-width:0;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start}
+.sc-event-primary{display:flex;align-items:center;gap:5px;min-width:0;width:100%;white-space:nowrap;overflow:hidden;line-height:1.2;font-size:11px}
+.sc-event-inline-time{flex:none;font-size:10px;font-weight:950;font-variant-numeric:tabular-nums}
+.sc-event-inline-service{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800}
+.sc-event-customer{font-size:12px;font-weight:950;line-height:1.13;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.017em}
+.sc-event.sc-compact{padding:2px 5px;justify-content:center;min-height:10px}
+.sc-event-single-line{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.1;font-size:10px;font-weight:850;font-variant-numeric:tabular-nums}
+.sc-event.sc-micro{padding:0 3px;min-height:10px;border-radius:3px;justify-content:center;gap:0}
+.sc-event.sc-micro .sc-event-single-line{font-size:9px;line-height:1;letter-spacing:-.03em}
+.sc-timeline.sc-fit-mode .sc-time-mark:not(.is-hour){font-size:9px;color:#89867d}
+.sc-calendar-viewport.is-fit-day{min-height:0;max-height:none}
+.sc-date-display strong{overflow:hidden;text-overflow:ellipsis}
+@media(max-width:900px){
+ .sc-toolbar-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px}
+ .sc-date-control{grid-column:1/-1;min-width:0;width:100%}
+ .sc-view-switch{grid-column:1;min-width:0;width:100%;flex:1}
+ .sc-view-switch .sc-view-btn{min-width:0;flex:1}
+ .sc-options-toggle{grid-column:2;display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;min-height:44px;border:1px solid #7d6b52;background:#292720;color:#ecd5b2;border-radius:11px;padding:9px 12px;font-size:12px;font-weight:850}
+ .sc-options-toggle[aria-expanded=true]{background:#eac48e;color:#1b1812}
+ .sc-options-toggle .sc-options-chevron{font-size:19px;line-height:10px}
+ .sc-toolbar-bottom:not(.is-open){display:none}
+ .sc-toolbar-bottom.is-open{display:flex;flex-direction:row;flex-wrap:wrap;gap:13px;margin-top:13px;padding-top:14px}
+ .sc-toolbar-bottom .sc-filter-control{flex:1;min-width:180px}
+ .sc-toolbar-bottom .sc-all-barbers-control{min-width:150px}
+ .sc-toolbar-bottom .sc-fit-day{align-self:flex-end}
+ .sc-toolbar-bottom .sc-refresh{margin-left:0;width:auto;align-self:flex-end}
+}
+@media(max-width:640px){
+ .sc-toolbar-top{grid-template-columns:minmax(0,1fr) 100px}
+ .sc-toolbar-bottom.is-open{padding-top:15px;gap:12px;align-items:flex-end}
+ .sc-options-toggle{padding:9px 8px}
+ .sc-toolbar-bottom .sc-all-barbers-control{width:100%;flex-basis:100%}
+ .sc-toolbar-bottom .sc-filter-control{width:100%;flex-basis:100%}
+ .sc-toolbar-bottom .sc-zoom-control{flex:1;min-width:145px}
+ .sc-toolbar-bottom .sc-fit-day{flex:1}
+ .sc-toolbar-bottom .sc-refresh{flex:1}
+ .sc-time-mark:not(.is-hour){font-size:9px}
+ .sc-timeline .sc-event{padding:4px 5px}
+ .sc-event-primary{font-size:10px;gap:4px}
+ .sc-event-customer{font-size:11px}
+ .sc-event-inline-time{font-size:10px}
+ .sc-event.sc-compact{padding:2px 4px}
+}
+@media(max-width:380px){
+ .sc-toolbar-bottom .sc-zoom-control{min-width:100%;flex-basis:100%}
+ .sc-toolbar-bottom .sc-fit-day,.sc-toolbar-bottom .sc-refresh{flex:1}
+}
