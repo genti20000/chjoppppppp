@@ -243,3 +243,12 @@
  .staff-customer-hints{gap:7px}
  .staff-customer-hint{font-size:12px;padding:9px 10px}
 }
+
+/* Choppers owner: missing barber-order table recovery. */
+.admin-setup-links{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:14px}
+.admin-setup-links a,.admin-setup-links button{display:inline-flex;align-items:center;justify-content:center;min-height:38px;border:1px solid #e7c48d;background:#342b1e;border-radius:8px;padding:9px 12px;color:#f1d8ae;font-size:12px;font-weight:800;text-decoration:none;line-height:1.25;cursor:pointer}
+.admin-setup-links button:hover,.admin-setup-links a:hover{background:#5c472c}
+.warning strong{display:block;font-size:15px;margin-bottom:5px}
+.warning p{margin:7px 0 4px}
+.admin-save-note{font-size:12px;line-height:1.55;color:#dbbd91;padding:0 23px 18px;margin:0}
+#save:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.45)}
