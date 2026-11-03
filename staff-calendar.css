@@ -167,3 +167,20 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid #eac
  .sc-bottom-note{font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+
+/* Compact, usable month grid on phones without forcing horizontal scrolling. */
+@media(max-width:640px){
+ .sc-month{min-width:0;padding:7px}
+ .sc-month-head,.sc-month-grid{gap:3px}
+ .sc-month-head span{font-size:9px;padding:10px 2px;letter-spacing:.02em}
+ .sc-month-day{min-height:74px;padding:6px 4px;gap:4px;border-radius:6px}
+ .sc-month-num{font-size:12px}
+ .sc-month-count{font-size:9px}
+ .sc-month-chip,.sc-month-more{display:none}
+ .sc-calendar-viewport:has(.sc-month){max-height:none;overflow-x:hidden}
+}
+@media(max-width:360px){
+ .sc-month-day{min-height:64px}
+ .sc-month-count{font-size:8px}
+}
