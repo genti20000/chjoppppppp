@@ -102,6 +102,7 @@ function setBarber(id){
  else note('');
  if(id!=='all')state.singleBarber=id;
  state.barber=id;load();
+ if(window.matchMedia('(max-width:900px)').matches)toggleOptions(false);
 }
 function shiftPeriod(direction){
  if(state.view==='day')state.date=addDays(state.date,direction);
@@ -159,7 +160,7 @@ function renderTimeline(lanes){
   const mobile=window.matchMedia('(max-width:640px)').matches;
   const viewportHeight=Math.max(mobile?290:350,Math.min(mobile?760:950,Math.round(window.innerHeight*(mobile?.63:.74))));
   viewport.style.height=viewportHeight+'px';
-  scale=Math.max(.64,(viewportHeight-60)/(to-from));
+  scale=Math.max(.12,(viewportHeight-60)/(to-from));
  }else{
   viewport.style.height='';
   scale=(tick===15?29:tick===30?20:13)/15;
@@ -414,12 +415,14 @@ $('barber-select').addEventListener('change',e=>setBarber(e.target.value));
 for(const b of document.querySelectorAll('[data-zoom]'))b.addEventListener('click',()=>{
  state.zoom=Number(b.dataset.zoom);
  state.fitDay=false;updateControls();
+ toggleOptions(false);
  if(state.view!=='month')render(); // Zoom never refetches the calendar.
 });
 $('fit-day').addEventListener('click',()=>{
  if(state.view!=='day')return;
  state.fitDay=!state.fitDay;
- updateControls();render(); // Fit is purely client-side: no extra customer lookup.
+ updateControls();render();
+ toggleOptions(false); // Fit is purely client-side: no extra customer lookup.
 });
 $('all-barbers').addEventListener('change',event=>{
  if(state.view!=='day')return;
@@ -433,7 +436,10 @@ function toggleOptions(open){
 $('sc-options-toggle').addEventListener('click',()=>{
  toggleOptions(!$('sc-settings').classList.contains('is-open'));
 });
-$('refresh').addEventListener('click',load);
+$('refresh').addEventListener('click',()=>{load();toggleOptions(false);});
+window.addEventListener('resize',()=>{
+ if(state.staff&&state.fitDay&&state.view==='day'&&state.events.length)render();
+});
 $('detail-close').addEventListener('click',closeDetail);
 $('appointment-backdrop').addEventListener('click',closeDetail);
 document.addEventListener('keydown',e=>{
